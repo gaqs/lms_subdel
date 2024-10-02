@@ -1,0 +1,117 @@
+body{
+  font-family: "Jost", sans-serif;
+}
+.p-15{
+  padding: 15px !important;
+}
+a{
+  color: #198754;
+  text-decoration: none;
+  font-weight: 500; 
+}
+.form-check-input, .form-check-label{
+  cursor: pointer;
+}
+.form-check-input:checked{
+  background-color: #198754;
+  border-color: #198754;
+}
+.box_shadow{
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.navbar{
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.dropdown-menu[data-bs-popper]{
+  left: -70px;
+}
+.hvr-underline-from-left:before{
+  background: #198754 !important;
+  height: 3px !important;
+}
+.hvr_underline{
+  display: inline-block;
+  vertical-align: middle;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  position: relative;
+  overflow: hidden;
+}
+.hvr_underline:before{
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #198754 !important;
+  height: 3px;
+}
+#header_carousel{
+  background: -webkit-linear-gradient(0deg, #264d3f 0, #08261d 100%);
+  background: -moz-linear-gradient(90deg, #264d3f 0, #08261d 100%);
+  background: linear-gradient(90deg, #264d3f 0, #08261d 100%);
+}
+#sidebar-nav {
+  width: 250px;
+}
+
+.delete_button i{
+  color: white;
+}
+.delete_button{
+  background: red;
+  border-radius: 50%;
+  padding: 6px 9px 4px 9px;
+  text-align: center;
+  z-index: 9;
+  margin-right: -10px;
+}
+
+section.sections {
+  margin-top: 7rem !important;
+}
+.post_date{
+  top: -17px;
+  background-color: #198754;
+  color: white;
+  padding: 5px 20px 5px 20px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.file_container{
+  width:100%;
+}
+.card_header{
+  height: 250px;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+a.page-link span, li.page-item a{
+  color: #198754 !important;
+}
+li.active a{
+  background-color: #198754 !important;
+  color: white !important;
+} 
+
+li.dropdown-item{
+  cursor: pointer;
+}
+.form-control::placeholder{
+  opacity: 0.5 !important;
+}
+
+.dropdown-toggle.no_arrow::after{
+  display: none;
+}
+
+#lesson_title, #module_title{
+  line-height: 38px;
+}
+
