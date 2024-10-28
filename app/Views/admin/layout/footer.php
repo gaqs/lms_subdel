@@ -25,13 +25,17 @@
   $(document).ready(function() {
 
     $('a[data-bs-toggle="tab"]').on('show.bs.tab', function(e) {
-        localStorage.setItem('activeTab', $(e.target).attr('href'));
+      localStorage.setItem('activeTab', $(e.target).attr('href'));
     });
     
     var activeTab = localStorage.getItem('activeTab');
     if(activeTab){
         $('a[href="' + activeTab + '"]').tab('show');
     }
+
+    $('body').on('click', '#edit_course, #new_course', function(){
+      localStorage.setItem('activeTab', '#basic_tab');
+    })
 
     var user_table = new DataTable('#users_table',{
       language: {

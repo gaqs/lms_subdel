@@ -12,7 +12,7 @@ class LessonModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id','module_id','title','duration','keywords','description','file','created_at','updated_at','deleted_at'];
+    protected $allowedFields    = ['id','module_id','course_id','title','duration','keywords','description','file','created_at','updated_at','deleted_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -36,9 +36,9 @@ class LessonModel extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = ['beforeInsert'];
-    protected $afterInsert    = [];
+    protected $afterInsert    = ['updateCourseDuration'];
     protected $beforeUpdate   = ['beforeUpdate'];
-    protected $afterUpdate    = [];
+    protected $afterUpdate    = ['updateCourseDuration'];
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
@@ -52,6 +52,21 @@ class LessonModel extends Model
       protected function beforeUpdate(array $data){
         $data['data']['updated_at'] = date('Y-m-d H:i:s');
         return $data;
+    }
+
+    protected function updateCourseDuration(array $data)
+    {
+        $course_id = $data['data']['course_id'];
+    
+        // Obtiene la duración total del curso
+        $query = $this->select('SEC_TO_TIME(SUM(TIME_TO_SEC(duration))) as total_duration')
+                              ->where('course_id', $course_id)
+                              ->get()
+                              ->getRow();
+    
+        // Actualiza la columna "duration" en la tabla "courses"
+        $courseModel = new \App\Models\CourseModel();
+        $courseModel->update($course_id, ['duration' => $query->total_duration]);
     }
 
 }

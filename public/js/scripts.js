@@ -1,3 +1,4 @@
+//validacion del RUT
 function checkRut(rut) {
   var valor = rut.value.replace('.','');
   valor = valor.replaceAll('-','');
@@ -18,3 +19,22 @@ function checkRut(rut) {
   if(dvEsperado != dv) {  return false; }
   rut.setCustomValidity('');
 }
+
+//activacion de los tooltips
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+
+ //cambia icono izq boton por icono carga y bloquea boton, NO AJAX
+ $('body').on('click', '.submit_something', function (event) {
+  event.preventDefault();
+  $(this).addClass('disabled')
+  $(this).html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                <span role="status">Enviando...</span>`)
+         .prop('disabled', true);
+
+  setTimeout(() => {
+    $(this).closest('form').submit();
+  }, 2000);
+  
+});

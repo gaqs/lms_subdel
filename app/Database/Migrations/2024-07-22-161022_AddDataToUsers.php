@@ -26,6 +26,9 @@ class AddMobileNumberToUsers extends Migration
         $fields = [
             'name' => ['type' => 'VARCHAR', 'constraint' => '150', 'null' => true],
             'lastname' => ['type' => 'VARCHAR', 'constraint' => '150', 'null' => true],
+            'phone' => ['type' => 'VARCHAR', 'constraint' => '9', 'null' => true],
+            'sex' => ['type' => 'ENUM', 'constraint' => ['M','F','O'], 'null' => true],
+            'birthday' => ['type' => 'DATE', 'null' => true],
         ];
         $this->forge->addColumn($this->tables['users'], $fields);
     }
@@ -35,6 +38,9 @@ class AddMobileNumberToUsers extends Migration
         $fields = [
             'name',
             'lastname',
+            'phone',
+            'sex',
+            'birthday',
         ];
         $this->forge->dropColumn($this->tables['users'], $fields);
     }

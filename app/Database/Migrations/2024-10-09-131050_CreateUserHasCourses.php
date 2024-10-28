@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateLessonsTable extends Migration
+class CreateUserHasCourses extends Migration
 {
     public function up()
     {
@@ -20,31 +20,13 @@ class CreateLessonsTable extends Migration
                 'constraint' => 11,
                 'unsigned' => true,
             ],
-            'module_id' => [
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => true,
-            ],
-            'title' => [
+            'user_id' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'duration' => [
+            'complete' => [
                 'type' => 'INT',
-                'null' => true,
-            ],
-            'keywords' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true,
-            ],
-            'description' => [
-                'type' => 'LONGTEXT',
-            ],
-            'file' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true,
+                'constraint' => 3,
             ],
             'created_at' => [
                 'type' => 'DATETIME',
@@ -61,11 +43,11 @@ class CreateLessonsTable extends Migration
         ]);
 
         $this->forge->addKey('id', true);
-        $this->forge->createTable('lessons');
+        $this->forge->createTable('user_has_courses');
     }
 
     public function down()
     {
-        $this->forge->dropTable('lessons');
+        $this->forge->dropTable('user_has_courses');
     }
 }

@@ -26,9 +26,12 @@ class Course extends BaseController
 
     public function index()
     {
-        $data['cursos'] = $this->courseModel->asObject()
-                                            ->findAll();
-    
+        $data['cursos'] = $this->courseModel->select('courses.*, levels.level as level, categories.name as category_name, users.name as username, users.id as userid, users.lastname as userlastname')
+                                        ->join('categories', 'courses.category_id = categories.id')
+                                        ->join('levels', 'courses.level_id = levels.id')
+                                        ->join('users', 'courses.instructor_id = users.id')
+                                        ->asObject()->findAll();
+
         return view('admin/sections/courses/index', $data);
     }
 
@@ -56,10 +59,10 @@ class Course extends BaseController
         $courseData = [
             'instructor_id' => auth()->user()->id,
             'title' => $data['title'],
+            'resume' => $data['resume'],
             'category_id' => (int)$data['category'],
             'status' => $publish,
             'level_id' => (int)$data['level'],
-            'duration' => (int)$data['duration'],
             'description' => $data['description'],
             'keywords' => $data['keywords']
         ]; 
@@ -101,11 +104,52 @@ class Course extends BaseController
 
     public function update($id = null)
     {
-        //
+        $data = $this->request->getPost();
+
+        if(!$this->modelRules->run($data, 'course_rules')){ //run rules of validation of data for blog
+            return redirect()->back()->withInput()->with('errors', $this->modelRules->getErrors());
+        }
+        $image = $this->request->getFile('image');
+        $imagename = $image->getSize() > 0 ? uploadMediaFile($image, $data['image_name'], $data['course_id'],'courses') : $data['image_name']; 
+
+        $publish = isset($data['publish']) ? 'publish':'draft';
+
+        $courseData = [
+            'id' => $data['course_id'],
+            'title' => $data['title'],
+            'resume' => $data['resume'],
+            'category_id' => (int)$data['category'],
+            'status' => $publish,
+            'level_id' => (int)$data['level'],
+            'image' => $imagename,
+            'description' => $data['description'],
+            'keywords' => $data['keywords']
+        ]; 
+
+        $this->courseModel->save($courseData);
+
+        return redirect()->to(base_url('admin/courses/edit/'.$data['course_id']))->with('success', 'Curso editado correctamente.');
     }
 
     public function delete($id = null)
     {
-        //
+        //Al borrar cursos, hay que borrar los modulos y lecciones pertenecientes al curso.
+        $id = $this->request->getPost('id'); //course_id
+
+        // Delete lessons
+        $modules = $this->moduleModel->where('course_id', $id)->asObject()->findAll();
+        foreach ($modules as $module) {
+            $lessons = $this->lessonModel->where('module_id', $module->id)->asObject()->findAll();
+            foreach ($lessons as $lesson) {
+                deleteMediaFile($lesson->id, 'lessons', 'file');
+                $this->lessonModel->delete($lesson->id);
+            }
+            $this->moduleModel->delete($module->id);
+        }
+
+        deleteMediaFile($id, 'courses', 'image');
+        $this->courseModel->delete($id);
+        
+        return redirect()->back()->with('success', 'Post eliminado correctamente');
     }
 }

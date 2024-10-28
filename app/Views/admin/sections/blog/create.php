@@ -67,10 +67,10 @@
           
             <?php  if( !empty($post->image) ): ?>
                 <div class="file_container position-relative mt-3" style="width:30%;">
-                  <a href="<?= base_url('admin/blogs/delete_image?id='.$post->id.'&imagename='.$post->image); ?>" class="text-danger position-absolute end-0 delete_button"  onclick="return confirm('¿Está seguro de querer eliminar el video?');">
+                  <a href="<?= base_url('admin/blogs/delete_media?id='.$post->id.'&type=image'); ?>" class="text-danger position-absolute end-0 delete_button"  onclick="return confirm('¿Está seguro de querer eliminar el video?');">
                     <i class="bi bi-trash"></i>
                   </a>
-                  <img src="<?=base_url('public/uploads/blog/'.$post->image) ?>" class="w-100">
+                  <img src="<?=base_url('public/uploads/blogs/'.$post->image) ?>" class="w-100">
                 </div>
             <?php endif ?>
 
@@ -92,21 +92,21 @@
                 if($ext == '.mp4'):
             ?>
                 <div class="file_container position-relative mt-3">
-                  <a href="<?= base_url('admin/blog/delete_file?id='.$post->id.'&filename='.$post->file); ?>" class="text-danger position-absolute end-0 delete_button"  onclick="return confirm('¿Está seguro de querer eliminar el video?');">
+                  <a href="<?= base_url('admin/home/delete_media?id='.$post->id.'&type=file&folder=blogs'); ?>" class="text-danger position-absolute end-0 delete_button"  onclick="return confirm('¿Está seguro de querer eliminar el video?');">
                     <i class="bi bi-trash"></i>
                   </a>
-                  <video class="video-js mt-4" controls>
-                    <source src="<?=base_url('public/uploads/blog/'.$post->file) ?>" type="video/mp4">
+                  <video class="video-js mt-4 w-100 h-100" controls>
+                    <source src="<?= base_url('public/uploads/blogs/'.$post->file) ?>" type="video/mp4">
                   </video>
                 </div>
             
             <?php elseif($ext == '.pdf'):?>
               <div class="file_container position-relative mt-3">
-                <a href="<?= base_url('admin/blog/delete_file?id='.$post->id.'&filename='.$post->file); ?>" class="text-danger position-absolute end-0 delete_button"  onclick="return confirm('¿Está seguro de querer eliminar el video?');">
+                <a href="<?= base_url('admin/home/delete_media?id='.$post->id.'&type=file&folder=blogs'); ?>" class="text-danger position-absolute end-0 delete_button"  onclick="return confirm('¿Está seguro de querer eliminar el video?');">
                   <i class="bi bi-trash"></i>
                 </a>
 
-                <embed src="<?=base_url('public/uploads/blog/'.$post->file) ?>" type="application/pdf" height="500" style="width:100%;">
+                <embed src="<?= base_url('public/uploads/blogs/'.$post->file) ?>" type="application/pdf" height="500" style="width:100%;">
 
               </div>
             <?php 

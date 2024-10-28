@@ -29,7 +29,7 @@ class Users extends BaseController
     {
         $data['action'] = 'new';
 
-        return view('admin/sections/users/edit', $data);
+        return view('admin/sections/users/create', $data);
     }
 
     
@@ -61,22 +61,36 @@ class Users extends BaseController
         $user = $users->findById($users->getInsertID());
 
         if( isset($request['admin']) ){
-            $users->addGroup('admin');
+            $user->addGroup('admin');
         }else{
             $users->addToDefaultGroup($user);
         }
+
+        return redirect()->to(base_url('admin/user/edit/'.$users->getInsertID() ))->with('success', 'Usuario creado correctamente.');
         
     }
 
 
     public function edit($id = null)
     {
-        $users = auth()->getPRovider();
-        $data['user'] = $users->findById($id);
+        $user = auth()->getPRovider();
+        $data['user']= $user->findById($id);
+
+        $db = db_connect();
+        $query = $db->table('auth_groups_users') ->where('user_id', $id) ->get() ->getRow();
+
+        if( !empty($query)){
+            if( $query->group == 'admin' || $query->group == 'superadmin' ){
+                $data['user']->admin = true;
+            }else{
+                $data['user']->admin = false;
+            }
+        }
+        
 
         $data['action'] = 'edit';
 
-        return view('admin/sections/users/edit', $data);
+        return view('admin/sections/users/create', $data);
     }
 
 
@@ -99,6 +113,17 @@ class Users extends BaseController
         ]);
 
         $users->save($user);
+
+        if( isset($request['admin']) ){
+            $user->removeGroup('user');
+            $user->addGroup('admin');
+        }else{
+            $user->removeGroup('admin');
+            $users->addToDefaultGroup($user);
+        }
+        
+
+        return redirect()->back()->withInput()->with('success', 'Usuario editado correctamente');
 
     }
 

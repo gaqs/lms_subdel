@@ -46,7 +46,7 @@ a{
   background: #198754 !important;
   height: 3px;
 }
-#header_carousel{
+.gradient_background{
   background: -webkit-linear-gradient(0deg, #264d3f 0, #08261d 100%);
   background: -moz-linear-gradient(90deg, #264d3f 0, #08261d 100%);
   background: linear-gradient(90deg, #264d3f 0, #08261d 100%);
@@ -71,12 +71,13 @@ section.sections {
   margin-top: 7rem !important;
 }
 .post_date{
-  top: -17px;
+  top: -18px;
   background-color: #198754;
   color: white;
   padding: 5px 20px 5px 20px;
   border-radius: 5px;
   font-size: 0.9rem;
+  right: 13px;
 }
 
 .file_container{
@@ -114,4 +115,77 @@ li.dropdown-item{
 #lesson_title, #module_title{
   line-height: 38px;
 }
+
+.nav_category{
+  color: black;
+}
+.nav_category:hover{
+  color: #198754;
+}
+.nav_category.active{
+  background-color: #198754 !important;
+}
+.image-center{
+  object-fit: cover;
+  object-position: center;
+  height: 100%;
+  width: 100%;
+}
+.h-200{
+  height: 200px;
+}
+
+.course_side{
+  margin-top: -250px;
+}
+.profile_cover{
+  height: 140px;
+  background: #198754;
+}
+
+.profile_info{
+  margin-top: -80px;
+}
+.profile_initial .letter{
+  font-size: 5rem;
+  background-color: #198754;
+  color: white;
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  text-align: center;
+  border: 1rem solid white;
+}
+
+.accordion-button:not(.collapsed){
+  background-color: #d1e7dd;
+  color: black;
+}
+.accordion-button:focus{
+  box-shadow: none;
+}
+
+.alert_home{
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  transform: translate(-50%,50%);
+  width: max-content;
+}
+
+.category_top{
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px 15px 5px 15px;
+  border-radius: 5px;
+  margin: -15px -10px 0 15px;
+  background-color: #198754;
+  color: white;
+}
+
+.admin_sidenav .nav-pills .nav-link.active{
+  background-color: #198754;
+}
+
 

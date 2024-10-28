@@ -43,7 +43,7 @@
         <tr>
           <td class="align-middle text-start"><?= $p->id ?></td>
           <td class="align-middle text-start"><?= $p->title ?></td>
-          <td class="align-middle text-start"><?= $p->status ?></td>
+          <td class="align-middle text-start"><?= $p->status == 'publish' ? 'Publicado' : 'Borrador' ?></td>
           <td class="align-middel text-start"><?= $p->name.' '.$p->lastname ?></td>
           <td class="align-middle text-start"><?= $p->created_at ?></td>
           <td class="align-middle text-end d-flex justify-content-end">

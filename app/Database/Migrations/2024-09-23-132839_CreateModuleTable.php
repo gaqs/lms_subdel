@@ -24,10 +24,6 @@ class CreateModuleTable extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'duration' => [
-                'type' => 'INT',
-                'null' => true,
-            ],
             'description' => [
                 'type' => 'LONGTEXT',
             ],

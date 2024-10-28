@@ -117,59 +117,19 @@ class Blog extends BaseController
         ]; 
         $this->blogModel->save($blogData);
 
-        return redirect()->to(base_url('admin/blogs/edit/'.$data['id']))->with('success', 'Post agregado correctamente.');
-    }
-
-    /**FIX PARA ELIMINAR CUALQUIER ARCHIVO EN CUALQUIER CARPETA
-     * Summary of deleteMedia
-     * @param mixed $id     id del usuario
-     * @param mixed $type   nombre del archivo a borrar, image o file.
-     * @return \CodeIgniter\HTTP\RedirectResponse
-     */
-    public function deleteMedia($id, $type)
-    {
-        $media = $this->blogModel->where('id', $id)->findColumn($type);
-        $filePath = ROOTPATH.'public/uploads/blog/'.$media[0];
-
-        if (file_exists($filePath)) {
-            if (unlink($filePath)) {
-                $blogData = [
-                    'id' => $id,
-                    $type => ''
-                ];
-                $this->blogModel->save($blogData);
-
-                return redirect()->back()->with('success', ucfirst($type).' eliminado correctamente.');
-            } else {
-                return redirect()->back()->with('error', 'No se pudo eliminar el '.$type);
-            }
-        } else {
-            return redirect()->back()->with('error', 'El '.$type.' no existe.');
-        }
+        return redirect()->to(base_url('admin/blogs/edit/'.$data['id']))->with('success', 'Post actualizado correctamente.');
     }
 
     public function delete($id = null)
     {
         $id = $this->request->getPost('id');
 
-        $this->deleteMedia($id, 'file');
-        $this->deleteMedia($id, 'image');
+        deleteMediaFile($id,'blogs', 'file');
+        deleteMediaFile($id, 'blogs', 'image');
 
         $this->blogModel->delete($id);
         return redirect()->back()->with('success', 'Post eliminado correctamente');
 
-    }
-    
-    public function delete_file()
-    {
-        $id = $this->request->getGet('id');
-        return $this->deleteMedia($id, 'file');
-    }
-
-    public function delete_image()
-    {
-        $id = $this->request->getGet('id');
-        return $this->deleteMedia($id, 'image');
     }
 
 }

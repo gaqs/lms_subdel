@@ -1,55 +1,49 @@
 <?= $this->extend('web/layout/app') ?>
 
-<?= $this->section('title') ?>Blog <?= $this->endSection() ?>
+<?= $this->section('title') ?>Cursos <?= $this->endSection() ?>
 
 
 <?= $this->section('main') ?>
 
-<section id="posts" class="sections">
+<section id="courses" class="sections">
   <div class="container">
     <div class="row">
       <div class="col-md-9">
-        <h4 class="title">Todos los Posts</h4>
+        <h4 class="title">Todos los Cursos</h4>
         <hr>
         
-        <div class="row">
-          <?php foreach ($posts as $p): ?>
-          <div class="col-md-12 mb-4">
-            <div class="card mt-3 w-100 hvr-float">
-              <div class="row">
-              <div class="col-md-4">
-                <div class="card_header" style="height:175px;">
-                  <img src="<?= base_url('uploads/blogs/'.$p->image); ?>" class="img-fluid w-100 h-100 object-fit-cover" alt="..." style="min-height:170px;">
-                </div>
+        <div class="row mt-4">
+          <?php foreach ($courses as $c): ?>
+          <div class="col-md-6 mb-4">
+            <div class="card w-100 hvr-float">
+              <div class="card-img-top card_header">
+                <div class="category_top"><?= $c->category_name ?></div>
+                <img src="<?= base_url('uploads/courses/'.$c->image); ?>" class="w-100 h-100 object-fit-cover" alt="...">
               </div>
-              <div class="col-md-8">
-                <div class="card-body ps-0 position-relative">
-                  <div class="post_date position-absolute left-0" style="left:0;right:inherit;">
-                    <?php 
-                      $date = new DateTime($p->created_at);
-                      $formatter = new IntlDateFormatter('es_ES', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
-                      echo $formatter->format($date);
-                    ?>
-                  </div>
-                  <h5 class="card-title mt-3"><?= $p->title; ?></h5>
-                  <p class="card-text">
-                    <?= substr( $p->description, 0, 150).'...'; ?>
-                  </p>
-                  <small>
-                    <div class="row">
-                      <div class="col">
-                        <i class="bi bi-person"></i> Por <?= $p->name.' '.$p->lastname; ?>
-                      </div>
-                      <div class="col">
-                        <a href="<?= base_url('blogs/show/'.$p->id); ?>" class="float-end">SEGUIR LEYENDO <i class="bi bi-arrow-right"></i></a>
-                      </div>
+              <div class="card-body position-relative">
+                <div class="post_date position-absolute">
+                  <?php 
+                    $date = new DateTime($c->created_at);
+                    $formatter = new IntlDateFormatter('es_ES', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
+                    echo $formatter->format($date);
+                  ?>
+                </div>
+                <h5 class="card-title mt-3"><?= $c->title; ?></h5>
+                <p class="card-text">
+                  <?= substr( $c->description, 0, 100).'...'; ?>
+                </p>
+                <small>
+                  <div class="row">
+                    <div class="col-12">
+                      <i class="bi bi-person"></i> Por <?= $c->name.' '.$c->lastname; ?> | 
+                      <i class="bi bi-file-earmark-text"></i> <?= $c->lesson_qty.' lecciones  ' ?>
                     </div>
-                  </small>
-                </div>
+                    <div class="col-12">
+                      <a href="<?= base_url('courses/show/'.$c->id); ?>" class="float-end">DETALLES <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                  </div>
+                </small>
               </div>
-              </div>
-              
-              
             </div>
           </div>
           <?php endforeach; ?>

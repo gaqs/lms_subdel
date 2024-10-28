@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateCoursesTable extends Migration
+class CreateUserHasWishes extends Migration
 {
     public function up()
     {
@@ -15,44 +15,19 @@ class CreateCoursesTable extends Migration
                 'unsigned' => true,
                 'auto_increment' => true
             ],
-            'instructor_id' => [
+            'course_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
             ],
-            'title' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-            ],
-            'resume' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-            ],
-            'category_id' =>[
+            'blog_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
             ],
-            'status' => [
-                'type' => 'ENUM',
-                'constraint' => ['draft', 'publish'],
-            ],
-            'level_id' => [
-                'type' => 'ENUM',
-                'constraint' => ['1','2','3'],
-            ],
-            'image' => [
+            'user_id' => [
                 'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true,
-            ],
-            'keywords' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true,
-            ],
-            'description' => [
-                'type' => 'LONGTEXT',
+                'constraint' => 255,
             ],
             'created_at' => [
                 'type' => 'DATETIME',
@@ -69,11 +44,11 @@ class CreateCoursesTable extends Migration
         ]);
 
         $this->forge->addKey('id', true);
-        $this->forge->createTable('courses');
+        $this->forge->createTable('user_has_wishes');
     }
 
     public function down()
     {
-        $this->forge->dropTable('courses');
+        $this->forge->dropTable('user_has_wishes');
     }
 }

@@ -27,10 +27,11 @@ class Lesson extends BaseController
     }
 
     public function new()
-    {
+    {                  
         //id del modulo 
         $data['lesson'] = (object)[
-            'module_id' => $this->request->getGet('module_id')
+            'module_id' => $this->request->getGet('module_id'),
+            'course_id' => $this->request->getGet('course_id'),
         ]; 
         $data['action'] = 'new';
         return view('admin/sections/lessons/create', $data);
@@ -47,10 +48,11 @@ class Lesson extends BaseController
         }
 
         $lessonData = [
+            'course_id' => $data['course_id'],
             'module_id' => $data['module_id'],
             'title' => $data['title'],
             'duration' => $data['duration'],
-            'keywords' => $data['duration'],
+            'keywords' => $data['keywords'],
             'description' => $data['description'],
         ];
 
@@ -77,7 +79,7 @@ class Lesson extends BaseController
     {
         $data['action'] = 'edit';
         $data['lesson'] = $this->lessonModel->asObject()->find($id);
-        return view('admin/sections/lesson/create', $data);
+        return view('admin/sections/lessons/create', $data);
     }
 
     public function update()
@@ -88,15 +90,21 @@ class Lesson extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->modelRules->getErrors());
         }
 
+        $file = $this->request->getFile('file');
+        $filename = $file->getSize() > 0 ? uploadMediaFile($file, $data['file_name'], $data['lesson_id'], 'lessons') : $data['file_name']; 
+
         $lessonData = [
-            'id' => $data['module_id'],
+            'id' => $data['lesson_id'],
             'course_id' => $data['course_id'],
+            'module_id' => $data['module_id'],
             'title' => $data['title'],
             'duration' => $data['duration'],
+            'keywords' => $data['keywords'],
             'description' => $data['description'],
+            'file' => $filename
         ];
 
-        $this->moduleModel->save($lessonData);
+        $this->lessonModel->save($lessonData);
 
         return redirect()->back()->withInput()->with('success', 'Lección editada correctamente');
     }
@@ -104,8 +112,10 @@ class Lesson extends BaseController
     public function delete()
     {
         $id = $this->request->getPost('id');
-        
+
+        deleteMediaFile($id, 'lessons', 'file');
         $this->lessonModel->delete($id);
+
         return redirect()->back()->withInput()->with('success', 'Lección eliminada correctamente');
     }
 }

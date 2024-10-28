@@ -1,5 +1,5 @@
 <!-- Footer -->
-<footer class="page-footer font-small mdb-color pt-5 mt-0 text-white" style="background-color:#08261c;">
+<footer class="page-footer font-small mdb-color pt-5 mt-5 text-white" style="background-color:#08261c;">
   <div class="container text-start">
     <div class="row text-start mt-3 pb-3">
       <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">

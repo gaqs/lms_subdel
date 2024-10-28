@@ -48,7 +48,6 @@ class Module extends BaseController
         $moduleData = [
             'course_id' => $data['course_id'],
             'title' => $data['title'],
-            'duration' => $data['duration'],
             'description' => $data['description'],
         ];
 
@@ -61,7 +60,7 @@ class Module extends BaseController
     {
         $data['action'] = 'edit';
         $data['module'] = $this->moduleModel->asObject()->find($id);
-        echo view('admin/sections/module/create', $data);
+        return view('admin/sections/module/create', $data);
     }
 
     public function update()
@@ -76,7 +75,6 @@ class Module extends BaseController
             'id' => $data['module_id'],
             'course_id' => $data['course_id'],
             'title' => $data['title'],
-            'duration' => $data['duration'],
             'description' => $data['description'],
         ];
 
@@ -89,8 +87,15 @@ class Module extends BaseController
     {
         $id = $this->request->getPost('id');
         
+        // Delete lessons
+        $lessons = $this->lessonModel->where('module_id', $id)->asObject()->findAll();
+        foreach ($lessons as $lesson) {
+            deleteMediaFile($lesson->id, 'lessons', 'file');
+            $this->lessonModel->delete($lesson->id);
+        }
+        // Delete module
         $this->moduleModel->delete($id);
-        $this->lessonModel->where('module_id', $id)->delete();
+        
         return redirect()->back()->withInput()->with('success', 'Módulo y lecciones eliminados correctamente');
     }
 }

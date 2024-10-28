@@ -1,6 +1,6 @@
 <?php $uri = service('uri'); ?>
 <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary py-3">
-  <div class="container-fluid">
+  <div class="container">
     <a class="navbar-brand me-5" href="<?= base_url(); ?>" ><i class="bi bi-mortarboard-fill text-success fs-3"></i> <b class="text-dark fw-bold">LMS</b></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -13,13 +13,13 @@
           <a class="nav-link me-md-2 text-dark <?= ($uri->getSegment(1) == '' ? 'hvr_underline' : 'hvr-underline-from-left') ?>" aria-current="page" href="<?= base_url(); ?>">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link me-md-2 text-dark <?= ($uri->getSegment(1) == 'blog' ? 'hvr_underline' : 'hvr-underline-from-left') ?>" aria-current="page" href="#">Blog</a>
+          <a class="nav-link me-md-2 text-dark <?= ($uri->getSegment(1) == 'blogs' ? 'hvr_underline' : 'hvr-underline-from-left') ?>" aria-current="page" href="<?= base_url('blogs'); ?>">Blog</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link me-md-2 text-dark <?= ($uri->getSegment(1) == 'cursos' ? 'hvr_underline' : 'hvr-underline-from-left') ?>" aria-current="page" href="#">Cursos</a>
+          <a class="nav-link me-md-2 text-dark <?= ($uri->getSegment(1) == 'courses' ? 'hvr_underline' : 'hvr-underline-from-left') ?>" aria-current="page" href="<?= base_url('courses'); ?>">Cursos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link me-md-2 text-dark <?= ($uri->getSegment(1) == 'instructors' ? 'hvr_underline' : 'hvr-underline-from-left') ?>" aria-current="page" href="#">Instructores</a>
+          <a class="nav-link me-md-2 text-dark disabled <?= ($uri->getSegment(1) == 'instructors' ? 'hvr_underline' : 'hvr-underline-from-left') ?>" aria-current="page" href="#">Instructores</a>
         </li>
       </ul>
 
@@ -30,14 +30,21 @@
         <a href="<?= url_to('login') ?>" class="btn btn-success"> <i class="bi bi-person"></i> Iniciar Sesión</a>
         
         <?php else: ?>
-        <li class="nav-item dropdown">
+        <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <?= auth()->user()->name.' '.auth()->user()->lastname; ?>
           </a>
           <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="<?= base_url('user');?>">Mi Perfil</a></li>
             <li><a class="dropdown-item" href="<?= base_url('logout');?>">Desconectar</a></li>
+            <?php if(auth()->user()->can('admin.access')): ?>
+            <li>
+              <hr>
+              <a class="dropdown-item" href="<?= base_url('admin');?>">Administrador</a>
+            </li>
+            <?php endif ?>
           </ul>
-        </li>
+        </div>
         <?php endif; ?>
       </ul>
       

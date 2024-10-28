@@ -58,8 +58,19 @@ class Blog extends BaseController
 
         $data['posts'] = $this->blogModel->select('blogs.*, users.name, users.lastname')
                                     ->join('users', 'users.id = blogs.user_id')
+                                    ->where('blogs.id !=', $id)
                                     ->orderBy('users.id', 'RANDOM')
                                     ->asObject()->findAll(3);
+
+        $db = db_connect();
+        $builder = $db->table('user_has_wishes');
+        
+        $data['has_wish'] = '';
+        if( isset( auth()->user()->id )){
+            $data['has_wish'] = $builder->where('user_id', auth()->user()->id )
+                                        ->where('blog_id', $id)
+                                        ->get()->getRow();
+        }
 
         return view('web/sections/blog/show', $data);
     }

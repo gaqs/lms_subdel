@@ -57,15 +57,7 @@
               <input type="email" class="form-control" id="input-email" name="email" value="<?= old('email', $user->email ?? '') ?>">
               <span class="input-group-text" id="validado">
                 <div class="form-check form-switch">
-                  <?php
-                    $checked = '';
-                    if(isset($user)){
-                      if($user->active == 1){
-                        $checked = 'checked';
-                      }
-                    }
-                  ?>
-                  <input class="form-check-input" type="checkbox" role="switch" name="validated" id="input-switch" <?= $checked; ?>>
+                  <input class="form-check-input" type="checkbox" role="switch" name="validated" id="input-switch" <?= isset($user) ? $user->active == 1 ? 'checked' : '' : '' ?>>
                   <label class="form-check-label" for="input-switch">Validado?</label>
                 </div>
               </span>
@@ -76,14 +68,16 @@
             <input type="text" class="form-control" id="input-password" name="password" value="<?= old('password', $user->password ?? '') ?>">
             <small class="text-secondary">Dejar en blanco si <b>no</b> desea cambiar la contraseña</small>
           </div>
+
           <?php if( auth()->user()->inGroup('admin', 'superadmin') ): ?>
           <div class="col-md-6 d-flex align-items-center">
             <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" role="switch" id="admin-switch" name="admin" checked>
+              <input class="form-check-input" type="checkbox" role="switch" id="admin-switch" name="admin" <?= isset($user) ? $user->admin == true ? 'checked' : '' : '' ?>>
               <label class="form-check-label" for="admin-switch">Dar permisos administrativos</label>
             </div>
           </div>
           <?php endif ?>
+
           <div class="col-md-12 mt-3"> 
             <button type="submit" class="btn btn-success float-end"><i class="bi bi-floppy2"></i> Guardar</button>
           </div>

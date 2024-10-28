@@ -8,9 +8,18 @@
           <?= auth()->user()->name.' '.auth()->user()->lastname; ?>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-          <li>
-              <a class="dropdown-item" href="<?= base_url('logout');?>">Logout</a>
-          </li>
+        <li>
+          <a class="dropdown-item" href="<?= base_url('user');?>">Profile</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="<?= base_url('logout');?>">Desconectar</a>
+        </li>
+        <?php if(auth()->user()->can('admin.access')): ?>
+        <li>
+          <hr>
+          <a class="dropdown-item" href="<?= base_url('admin');?>">Administrador</a>
+        </li>
+        <?php endif ?>
       </ul>
     </div>
   </div>

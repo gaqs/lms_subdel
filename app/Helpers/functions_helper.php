@@ -41,7 +41,7 @@ if (!function_exists('uploadMediaFile')) {
    * 
    * @return string|false Return an array with the file path and name if successful, or false if failed.
    */
-  function uploadMediaFile($file, $fileName, $post_id = '0',$uploadDir='blog', $allowedTypes = ['jpg','jpeg','png','mp4','avi', 'pdf'])
+  function uploadMediaFile($file, $fileName, $post_id = '0',$uploadDir='blogs', $allowedTypes = ['jpg','jpeg','png','mp4','avi', 'pdf'])
   {
 
     if ($file->isValid() && !$file->hasMoved()) {
@@ -72,6 +72,41 @@ if (!function_exists('uploadMediaFile')) {
   }
 }
 
+if(!function_exists('deleteMediaFile')){
+  /*
+  * Delete type = image or file
+  */
+  function deleteMediaFile($id, $table, $type)
+  {
+    $db = db_connect();
+    $builder = $db->table($table);
+    $filename = $builder->select( $type )
+                        ->where('id', $id)
+                        ->get()
+                        ->getResultArray();
+
+    $filePath = ROOTPATH.'public/uploads/'.$table.'/'.$filename[0][$type];
+    
+    if (file_exists($filePath)) {
+      if (unlink($filePath)) {
+
+        $builder->set($type, '')
+                ->where('id', $id)
+                ->update();
+
+          return true;
+      } else {
+          return false;
+      }
+    } else {
+        return false;
+    }
+  
+        
+  }
+
+}
+
 function showFlashMessage($type, $message){
 
   $class = "";
@@ -81,4 +116,25 @@ function showFlashMessage($type, $message){
 
   echo '<div class="alert alert-dismissible fade show '.$class.'">'.$message.'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 
+}
+
+function checkEmailLimit($session)
+{
+    // Inicializar el contador si no existe
+    if (!$session->get('email_count')) {
+        $session->set('email_count', 0);
+        $session->set('first_email_time', time()); // Guardar la hora del primer envío
+    }
+    // Verificar si ha pasado una hora desde el primer envío
+    if (time() - $session->get('first_email_time') > 3600) {
+        // Reiniciar el contador y la hora
+        $session->set('email_count', 0);
+        $session->set('first_email_time', time());
+    }
+    // Limitar a 3 correos por hora
+    if ($session->get('email_count') >= 3) {
+        return 'Has alcanzado el límite de correos enviados. Intente más tarde.';
+    }
+
+    return true; // Si todo está bien, devolver true
 }

@@ -96,6 +96,41 @@ class Validation extends BaseConfig
             'rules' => 'required|matches[password]',
         ],
     ];
+
+    // --------------------------------------------------------------------
+    // Rules  of User Profile
+    // --------------------------------------------------------------------
+    public $user_rules = [
+        'name' => [
+            'label' => 'nombre',
+            'rules' => [
+                'required',
+                'min_length[3]',
+                'max_length[254]',
+            ],
+        ],
+        'lastname' => [
+            'label' => 'apellido',
+            'rules' => [
+                'required',
+                'min_length[3]',
+                'max_length[254]',
+            ],
+        ],
+        'phone' => [
+            'label' => 'teléfono',
+            'rules' => [
+                'max_length[9]',
+                'numeric'
+            ]
+        ],
+        'birthday' => [
+            'label' => 'fecha de nacimiento',
+            'rules' => [
+                'valid_date',
+            ]
+        ],
+    ];
     
     // --------------------------------------------------------------------
     // Rules  of Blogs
@@ -135,13 +170,13 @@ class Validation extends BaseConfig
             'label' => 'titulo',     
             'rules' => 'required|min_length[5]|max_length[100]' 
         ], 
+        'resume' => [ 
+            'label' => 'resumen',     
+            'rules' => 'required|min_length[5]|max_length[300]' 
+        ], 
         'category' => [ 
             'label' => 'categoria',  
             'rules' => 'required' 
-        ],
-        'duration' => [
-            'label' => 'duración',
-            'rules' => 'required|numeric'
         ],
         'keywords' => [ 
             'label' => 'keywords',   
@@ -161,10 +196,6 @@ class Validation extends BaseConfig
             'label' => 'titulo',     
             'rules' => 'required|min_length[5]|max_length[100]' 
         ], 
-        'duration' => [
-            'label' => 'duración',
-            'rules' => 'required|numeric'
-        ],
         'description' => [ 
             'label' => 'descripción',
             'rules' => 'required|min_length[50]' 
@@ -182,7 +213,7 @@ class Validation extends BaseConfig
         ], 
         'duration' => [
             'label' => 'duración',
-            'rules' => 'required|numeric'
+            'rules' => 'required'
         ],
         'keywords' => [ 
             'label' => 'keywords',   
@@ -197,5 +228,64 @@ class Validation extends BaseConfig
             'rules' => 'max_size[file,2000000]|ext_in[file,mp4,pdf]' 
         ]     
     ];
+
+    // --------------------------------------------------------------------
+    // Rules of change password
+    // --------------------------------------------------------------------
+    public $password = [
+        'oldpass' => [
+            'label' => 'contraseña',
+            'rules' => 'required',
+        ],
+        'newpass' => [
+            'label' => 'nueva contraseña',
+            'rules' => 'required|max_byte[72]|strong_password[]',
+            'errors' => [
+                'max_byte' => 'Auth.errorPasswordTooLongBytes'
+            ]
+        ],
+        'repeatpass' => [
+            'label' => 'repetir contraseña',
+            'rules' => 'required|matches[newpass]',
+        ], 
+    ];
+
+    // --------------------------------------------------------------------
+    // Rules of help
+    // --------------------------------------------------------------------
+    public $help_rules = [
+        'name' => [
+            'label' => 'nombre',
+            'rules' => [
+                'required',
+                'min_length[3]',
+                'max_length[254]',
+            ],
+        ],
+        'phone' => [
+            'label' => 'teléfono',
+            'rules' => [
+                'max_length[9]',
+                'numeric'
+            ]
+        ],
+        'email' => [
+            'label' => 'correo',
+            'rules' => [
+                'required',
+                'max_length[254]',
+                'valid_email',
+            ],
+        ],
+        'subject' => [ 
+            'label' => 'asunto',     
+            'rules' => 'required|min_length[5]|max_length[100]' 
+        ], 
+        'message' => [ 
+            'label' => 'mensaje',     
+            'rules' => 'required|min_length[5]|max_length[500]' 
+        ],  
+    ];
+
 
 }
