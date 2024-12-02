@@ -37,6 +37,10 @@
         </div>
         <?php endif ?>
 
+        <div id="comments" class="col-md-13">
+          <?= $this->include('web/sections/comments/home'); ?>
+        </div>
+
       </div>
       <div class="col-md-4">
         <div class="d-flex fw-bold">Quizás te interese</div>

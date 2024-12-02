@@ -38,6 +38,7 @@
     })
 
     var user_table = new DataTable('#users_table',{
+      responsive:true,
       language: {
         url: 'https://cdn.datatables.net/plug-ins/2.1.3/i18n/es-MX.json',
       }
@@ -69,5 +70,13 @@
 
   });
 
+  const player = videojs('lesson_video');
+
+  console.log(player);
+
+  player.on('pause', () => {
+    const currentTime = player.currentTime();
+    console.log(`The video was paused at: ${currentTime} seconds.`);
+  })
   
 </script>

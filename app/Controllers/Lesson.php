@@ -41,7 +41,7 @@ class Lesson extends BaseController
         if( $modules != ''){
             $lessons = [];
             foreach ($modules as $module) {
-                $lessons[$module->id] = $this->lessonModel->select('id,title,duration')->where('module_id', $module->id)->asObject()->findAll();
+                $lessons[$module->id] = $this->lessonModel->select('id,title,duration,file')->where('module_id', $module->id)->asObject()->findAll();
             }
             $data['module'] = $modules;
             $data['lessons'] = $lessons;
@@ -50,5 +50,10 @@ class Lesson extends BaseController
         $data['course'] = $course;
 
         return view('web/sections/lessons/show', $data);
+    }
+
+    public function progress()
+    {
+
     }
 }

@@ -22,6 +22,11 @@
                     <i class="bi bi-journal-text me-2"></i> Cursos
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="<?= base_url('admin/comments');?>" class="nav-link p-3 text-white <?= ($uri->getSegment(2) == 'comments' ? 'active' : '') ?>">
+                <i class="bi bi-chat-quote me-2"></i> Comentarios
+                </a>
+            </li>
             <hr>
             <li class="nav-item">
                 <a href="<?= base_url();?>" class="nav-link p-3 text-white">

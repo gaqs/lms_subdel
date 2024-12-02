@@ -64,7 +64,7 @@
                         </div>
 
                         <div class="d-grid col-12 mx-auto m-3">
-                            <button type="submit" class="btn btn-success btn-block w-100"><?= lang('Auth.register') ?></button>
+                            <button type="submit" class="btn btn-success btn-block w-100 submit_something"><?= lang('Auth.register') ?></button>
                         </div>
 
                         <p class="text-center"><?= lang('Auth.haveAccount') ?> <a href="<?= url_to('login') ?>"><?= lang('Auth.login') ?></a></p>

@@ -28,6 +28,7 @@
         <?php if( !isset(auth()->user()->username) ): ?>
 
         <a href="<?= url_to('login') ?>" class="btn btn-success"> <i class="bi bi-person"></i> Iniciar Sesión</a>
+        <a href="<?= url_to('register') ?>" class="btn btn-link"> <i class="bi bi-person-plus"></i> Registrarse</a>
         
         <?php else: ?>
         <div class="nav-item dropdown">

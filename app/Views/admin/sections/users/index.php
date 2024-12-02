@@ -25,7 +25,7 @@
         <th class="align-middle text-start">RUT</th>
         <th class="align-middle text-start">Correo</th>
         <th class="align-middle text-end">Creado</th>
-        <th class="align-middle text-end">Accion</th>
+        <th class="align-middle text-end" style="min-width:120px">Accion</th>
       </tr>
     </thead>
     <tbody>
@@ -37,16 +37,15 @@
           <td class="align-middle text-start"><?= $u->username ?></td>
           <td class="align-middle text-start"><?= $u->email ?></td>
           <td class="align-middle text-end"><?= $u->created_at ?></td>
-          <td class="align-middle text-end d-flex justify-content-end">
-            <a href="<?= base_url('admin/users/edit/'.$u->id); ?>" type="button" class="btn btn-primary">
+          <td class="align-middle text-end">
+            <a href="<?= base_url('admin/users/edit/'.$u->id); ?>" type="button" class="btn btn-primary d-inline-block">
               <i class="bi bi-pencil-square"></i>
             </a>
-            <form action="<?= base_url('admin/users/delete') ?>" method="POST" class="">
-              <!--<input type="hidden" name="_method" value="DELETE">-->
+            <form action="<?= base_url('admin/users/delete') ?>" method="POST" class="d-inline">
               <input type="hidden" name="id" value="<?= $u->id ?>">
-                  <button type="submit" class="btn btn-danger rounded-end" onclick="return confirm('¿Está seguro de querer eliminar al usuario?');">
-                    <i class="bi bi-trash"></i>
-                  </button>             
+              <button type="submit" class="btn btn-danger rounded-end" onclick="return confirm('¿Está seguro de querer eliminar al usuario?');">
+                <i class="bi bi-trash"></i>
+              </button>             
             </form>
           </td>
         </tr>

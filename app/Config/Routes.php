@@ -17,6 +17,10 @@ $routes->get('/blogs/show/(:num)',    'Blog::show/$1');
 $routes->get('/courses',              'Course::index');
 $routes->get('/courses/show/(:num)',  'Course::show/$1');
 
+$routes->post('/comment/create',      'Comment::create');
+$routes->post('/comment/update',      'Comment::update');
+$routes->get('/comment/delete',       'Comment::delete');
+
 $routes->get('/courses/join',         'Course::join',    ['filter' => 'group:admin,user']);
 $routes->get('/lesson/show/(:num)',   'Lesson::show/$1', ['filter' => 'group:admin,user']);
 
@@ -74,6 +78,12 @@ $routes->group('admin', ['filter' => 'group:superadmin,admin'], static function(
   $routes->get('lesson/edit/(:num)', 'Admin\Lesson::edit/$1');
   $routes->post('lesson/update',     'Admin\Lesson::update');
   $routes->post('lesson/delete',     'Admin\Lesson::delete');
+
+  //Admin / comments
+  $routes->get('comments/',            'Admin\Comment::index');
+  $routes->get('comments/edit/(:num)', 'Admin\Comment::edit/$1');
+  $routes->post('comments/update',     'Admin\Comment::update');
+  $routes->get('comments/delete',     'Admin\Comment::delete');
 
 });
 

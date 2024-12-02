@@ -37,7 +37,7 @@
                 <th class="align-middle text-start">Status</th>
                 <th class="align-middle text-start">Instructor</th>
                 <th class="align-middle text-start">Creado</th>
-                <th class="align-middle text-end">Accion</th>
+                <th class="align-middle text-end" style="min-width:120px">Accion</th>
             </tr>
         </thead>
         <tbody>
@@ -48,11 +48,11 @@
                     <td class="align-middle text-start"><?= $c->status == 'publish' ? 'Publicado' : 'Borrador' ?> </td>
                     <td class="align-middel text-start"><?= $c->username.' '.$c->userlastname; ?></td>
                     <td class="align-middle text-start"><?= $c->created_at; ?></td>
-                    <td class="align-middle text-end d-flex justify-content-end">
-                        <a href="<?= base_url('admin/courses/edit/' . $c->id); ?>" type="button" class="btn btn-primary" id="edit_course">
+                    <td class="align-middle text-end">
+                        <a href="<?= base_url('admin/courses/edit/' . $c->id); ?>" type="button" class="btn btn-primary d-inline-block" id="edit_course">
                             <i class="bi bi-pencil-square"></i>
                         </a>
-                        <form action="<?= base_url('admin/courses/delete') ?>" method="POST" class="">
+                        <form action="<?= base_url('admin/courses/delete') ?>" method="POST" class="d-inline">
                             <!--<input type="hidden" name="_method" value="DELETE">-->
                             <input type="hidden" name="id" value="<?= $c->id ?>">
                             <button type="submit" class="btn btn-danger rounded-end" onclick="return confirm('¿Está seguro de querer eliminar el curso?');">

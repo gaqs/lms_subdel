@@ -102,7 +102,7 @@
                     <li class="list-group-item">
                       <i class="bi bi-lock me-2"></i>
 
-                      <i class="bi bi-play-btn"></i> 
+                      <?= type_lesson_file($lesson->file) ?>
                       
                       <?= 'Lección '.$count_l.': '.$lesson->title ?> 
                       <span class="float-end"><?= $lesson->duration ?></span> 
@@ -139,6 +139,10 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <div id="comments" class="col-md-8 mt-5">
+          <?= $this->include('web/sections/comments/home'); ?>
       </div>
 
     </div>

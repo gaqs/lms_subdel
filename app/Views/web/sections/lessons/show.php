@@ -26,7 +26,7 @@
               if($ext == '.mp4'):
           ?>
               <div class="file_container position-relative mt-3">
-                <video class="video-js mt-4 w-100 h-100" controls>
+                <video id="lesson_video" class="video-js mt-4 w-100 h-100" controls>
                   <source src="<?=base_url('public/uploads/lessons/'.$content->file) ?>" type="video/mp4">
                 </video>
               </div>
@@ -69,8 +69,14 @@
                       
                       <li class="list-group-item">
                         <a href="<?= base_url('lesson/show/'.$lesson->id) ?>" class="<?= $lesson->id != $uri->getSegment(3) ? 'text-black fw-normal' : '' ?>">
-                          <i class="bi bi-unlock me-2"></i>
-                          <i class="bi bi-play-btn"></i> 
+                       
+                        <div class="form-check d-inline ps-0">
+                          <input class="form-check-input" type="checkbox" value="" id="<?= 'lesson_'.$lesson->id ?>">
+                        </div>
+
+                          <!-- cambiar icono si es video o coumento pdf -->
+                          <?= type_lesson_file($lesson->file) ?>
+                          
                           <?= 'Lección '.$count_l.': '.$lesson->title ?> 
                           <span class="float-end"><?= $lesson->duration ?></span> 
                         </a>
@@ -96,3 +102,16 @@
 </section>
 
 <?= $this->endSection() ?>
+
+<script>
+  const video = document.getElementById('lesson_video');
+  let watchedPorcentage = 0;
+
+  video.addEventListener('timeupdate', () => {
+    const percentage = Math.floor(( video.currentTime / video.duration) * 100 );
+    watchedPorcentage = Math.max(watchedPorcentage, porcetage);
+  });
+
+  console.log(video);
+  
+</script>

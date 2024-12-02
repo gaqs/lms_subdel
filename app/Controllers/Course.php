@@ -7,6 +7,7 @@ use App\Models\CategoryModel;
 use App\Models\CourseModel;
 use App\Models\LessonModel;
 use App\Models\ModuleModel;
+use App\Models\CommentModel;
 
 use CodeIgniter\HTTP\ResponseInterface;
 
@@ -18,6 +19,7 @@ class Course extends BaseController
     protected $moduleModel;
     protected $courseModel;
     protected $lessonModel;
+    protected $commentModel;
 
     public function __construct()
     {
@@ -25,6 +27,7 @@ class Course extends BaseController
         $this->courseModel   = new CourseModel();
         $this->lessonModel   = new LessonModel();
         $this->moduleModel   = new ModuleModel();
+        $this->commentModel  = new CommentModel();
 
         $this->pagintation = Services::pager();
     }
@@ -93,6 +96,14 @@ class Course extends BaseController
             $data['module'] = $modules;
             $data['lessons'] = $lessons;
         }
+
+        //Comments and pager, replies are in the view comments/show
+        $data['comments'] = $this->commentModel->select('comments.*, CONCAT(users.name," ", users.lastname) AS commentator')
+                                               ->join('users', 'users.id = comments.commentator_id')
+                                               ->where('comments.section', 'courses')
+                                               ->where('comments.section_id', $id)->paginate(5, 'res');
+
+        $data['comment_pager'] = $this->commentModel->pager;
         
         $data['course'] = $course;
         

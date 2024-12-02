@@ -6,17 +6,20 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\BlogModel;
 use App\Models\CategoryModel;
+use App\Models\CommentModel;
 use Config\Services;
 
 class Blog extends BaseController
 {
     protected $blogModel;
     protected $categoryModel;
+    protected $commentModel;
     protected $pagination;
     public function __construct()
     {
         $this->blogModel = new BlogModel();
         $this->categoryModel = new CategoryModel();
+        $this->commentModel = new CommentModel();
 
         $this->pagintation = Services::pager();
     }
@@ -61,6 +64,15 @@ class Blog extends BaseController
                                     ->where('blogs.id !=', $id)
                                     ->orderBy('users.id', 'RANDOM')
                                     ->asObject()->findAll(3);
+        
+        //Comments and pager, replies are in the view comments/show
+        $data['comments'] = $this->commentModel->select('comments.*, CONCAT(users.name," ", users.lastname) AS commentator')
+                                               ->join('users', 'users.id = comments.commentator_id')
+                                               ->where('comments.section', 'blogs')
+                                               ->where('comments.section_id', $id)->paginate(5, 'res');
+
+        $data['comment_pager'] = $this->commentModel->pager;
+
 
         $db = db_connect();
         $builder = $db->table('user_has_wishes');

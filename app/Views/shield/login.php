@@ -55,7 +55,7 @@
                     <?php endif; ?>
 
                     <div class="d-grid col-12 mx-auto m-3">
-                        <button type="submit" class="btn btn-success btn-block"><?= lang('Auth.login') ?></button>
+                        <button type="submit" class="btn btn-success btn-block submit_something"><?= lang('Auth.login') ?></button>
                     </div>
 
                     <?php if (setting('Auth.allowMagicLinkLogins')) : ?>

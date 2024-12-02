@@ -118,7 +118,7 @@ function showFlashMessage($type, $message){
 
 }
 
-function checkEmailLimit($session)
+function checkEmailLimit($max, $session)
 {
     // Inicializar el contador si no existe
     if (!$session->get('email_count')) {
@@ -132,9 +132,57 @@ function checkEmailLimit($session)
         $session->set('first_email_time', time());
     }
     // Limitar a 3 correos por hora
-    if ($session->get('email_count') >= 3) {
+    if ($session->get('email_count') >= $max) {
         return 'Has alcanzado el límite de correos enviados. Intente más tarde.';
     }
 
     return true; // Si todo está bien, devolver true
+}
+
+function blog_datetime($datetime)
+{
+  $date = new DateTime($datetime);
+  $formatter = new IntlDateFormatter('es_ES', IntlDateFormatter::MEDIUM, IntlDateFormatter::SHORT);
+  return $formatter->format($date);
+}
+
+
+function badWordFilter($text)
+{
+  $badWords = APPPATH.'Language/badword.json';
+  // Expresiones regulares para variaciones de palabras (como tildes, errores, etc.)
+  $patterns = [];
+  foreach ($badWords as $word) {
+      // Genera variaciones de cada mala palabra
+      $escapedWord = preg_quote($word, '/'); // Escapa caracteres especiales
+
+      // Crear patrón que permita variaciones (como tildes y números en lugar de letras)
+      $pattern = str_replace(
+          ['a', 'e', 'i', 'o', 'u'],
+          ['[aáà4@]', '[eéè3]', '[iíì1]', '[oóò0]', '[uúù]'],
+          $escapedWord
+      );
+      // Añadir al array de patrones
+      $patterns[] = "/\b$pattern\b/i";
+  }
+
+  // Función de reemplazo
+  $replacement = function ($matches) {
+      return str_repeat('*', strlen($matches[0])); // Reemplaza con asteriscos
+  };
+
+  // Reemplaza malas palabras en el texto
+  return preg_replace_callback($patterns, $replacement, $text);
+}
+
+function type_lesson_file($file_name)
+{
+  $ext = strtolower( substr( $file_name, -4));
+  if($ext == '.pdf'){
+    echo '<i class="bi bi-file-earmark-pdf"></i>';
+  }elseif( $ext == '.mp4' ) {
+    echo '<i class="bi bi-play-btn"></i>';
+  }else{
+    echo '<i class="bi bi-file-earmark"></i>';
+  }
 }

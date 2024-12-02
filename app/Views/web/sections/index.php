@@ -20,7 +20,7 @@
         <p>Explora nuevas habilidades más allá del mundo del conocimiento y pierdete en la libertad de la creatividad.</p>
         <a href="<?= base_url('login') ?>" class="btn btn-success px-5 py-2">Iniciar <i class="bi bi-arrow-right"></i></a>
       </div>
-      <div class="col">
+      <div class="col d-none d-md-none d-lg-block">
         <img src="<?= base_url('img/header.png'); ?>" alt="" class="w-100">
       </div>
     </div>
@@ -37,7 +37,7 @@
 
       <div class="col-md-12 mb-5">
         <div class="d-flex justify-content-center">
-          <ul class="nav nav-pills">
+          <ul class="nav nav-pills justify-content-center">
             <li class="nav-item">
               <button class="nav-link active nav_category" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Todas las Categorias</button>
             </li>

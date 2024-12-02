@@ -29,12 +29,49 @@ const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstra
  $('body').on('click', '.submit_something', function (event) {
   event.preventDefault();
   $(this).addClass('disabled')
-  $(this).html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                <span role="status">Enviando...</span>`)
-         .prop('disabled', true);
+  $(this).html(`
+    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+    <span class="" role="status">Cargando...</span>
+  `).prop('disabled', true);
 
   setTimeout(() => {
     $(this).closest('form').submit();
   }, 2000);
   
 });
+/* 
+* COMMENT SCRIPTS
+*/
+function updateComment(id) {
+  $("#updateCommentModal").modal("show");
+  
+  let updateCommentID = $("#commentID-" + id).val();
+  let updateCommentator = $("#commentator-" + id).text();
+  let updateComment = $("#comment-" + id).text();
+
+  $("#updateCommentID").val(updateCommentID);
+  $("#updateCommentator").val(updateCommentator);
+  $("#updateComment").val(updateComment);
+}
+
+function replyComment(id) {
+  $("#replyCommentModal").modal("show");
+
+  let getCommentID = $("#commentID-" + id).val();
+  let getCommentator = $("#commentator-" + id).text();
+
+  $("#replyCommentID").val(getCommentID);
+  $("#replyTo").text(getCommentator);
+}
+
+function updateReply(id) {
+  $("#updateReplyModal").modal("show");
+  
+  let updateReplyID = $("#replyID-" + id).val();
+  let updateReplier = $("#replier-" + id).text();
+  let updateReply = $("#reply-" + id).text();
+
+  $("#updateReplyID").val(updateReplyID);
+  $("#updateReplier").val(updateReplier);
+  $("#updateReply").val(updateReply);
+}
