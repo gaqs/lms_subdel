@@ -15,6 +15,8 @@
   <div class="container">
     <div class="row text-white">
       <div class="col align-self-center">
+
+        <img src="<?= base_url('img/logo_muni.png');?>" alt="" class="mb-3" style="width:200px;">
         <h5>Plataforma de aprendizaje online</h5>
         <h1 class="display-3 lh-1 fw-bolder">Únete & <span class="text-success">aprende</span> de manera efectiva</h1>
         <p>Explora nuevas habilidades más allá del mundo del conocimiento y pierdete en la libertad de la creatividad.</p>
@@ -38,7 +40,7 @@
       <div class="col-md-12 mb-5">
         <div class="d-flex justify-content-center">
           <ul class="nav nav-pills justify-content-center">
-            <li class="nav-item">
+            <li class="nav-item"> 
               <button class="nav-link active nav_category" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Todas las Categorias</button>
             </li>
             <?php $count = 0; foreach($categories as $cat):?>

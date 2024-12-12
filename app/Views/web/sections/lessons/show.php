@@ -26,15 +26,34 @@
               if($ext == '.mp4'):
           ?>
               <div class="file_container position-relative mt-3">
-                <video id="lesson_video" class="video-js mt-4 w-100 h-100" controls>
+                <video id="lesson_video" class="video-js mt-4 w-100 h-100" controls preload="auto">
                   <source src="<?=base_url('public/uploads/lessons/'.$content->file) ?>" type="video/mp4">
                 </video>
               </div>
           
           <?php elseif($ext == '.pdf'):?>
-            <div class="file_container position-relative mt-3">
-              <embed src="<?=base_url('public/uploads/lessons/'.$content->file) ?>" type="application/pdf" height="700" style="width:100%;">
+          
+            <div id="pdf_navigation" class="d-flex mb-2 justify-content-center align-items-center">
+              <div id="zoom">
+                <button id="zoomout" class="btn btn-success me-1"><i class="bi bi-zoom-out"></i></button>
+                <button id="zoomin" class="btn btn-success me-2"><i class="bi bi-zoom-in"></i></button>
+              </div>
+              <button id="prev_page" class="btn btn-success me-2">Anterior</button>
+              <div id="page_info">
+                Página <span id="current_page">0</span> de <span id="total_pages">0</span>
+              </div>
+              <button id="next_page" class="btn btn-success ms-2">Siguiente</button>
+              <div id="zoom">
+                <button id="download" class="btn btn-success ms-2 me-1 disabled"><i class="bi bi-cloud-arrow-down"></i></button>
+                <button id="print" class="btn btn-success disabled"><i class="bi bi-printer"></i></button>
+              </div>
             </div>
+            <div id="pdf_container" class="w-100 text-center overflow-scroll border border-black" style="height:800px;">
+              <canvas id="pdf_canvas"></canvas>
+            </div>
+          <!--
+          <iframe class="w-100" height="800" src="<?= base_url('dist/pdfjs-4.9.124/web/viewer.html?file=').base_url('public/uploads/lessons/'.$content->file) ?>" frameborder="0"></iframe>
+          -->
           <?php 
               endif;
             endif 
@@ -71,7 +90,8 @@
                         <a href="<?= base_url('lesson/show/'.$lesson->id) ?>" class="<?= $lesson->id != $uri->getSegment(3) ? 'text-black fw-normal' : '' ?>">
                        
                         <div class="form-check d-inline ps-0">
-                          <input class="form-check-input" type="checkbox" value="" id="<?= 'lesson_'.$lesson->id ?>">
+                  
+                          <input class="form-check-input check_lesson" type="checkbox" value="<?= $lesson->id ?>" <?= ($lesson->completed  == '100' ? 'checked':'')?>>
                         </div>
 
                           <!-- cambiar icono si es video o coumento pdf -->
@@ -92,6 +112,22 @@
               <?php $count_m++; endforeach; endif; ?>
 
             </div>
+            
+            <div id="progress_bar" class="mt-5">
+              <div class="mb-3">
+                <h5>Progreso del curso</h5>
+              </div>
+              <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="<?= $progress ?>" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: <?= $progress ?>%"><?= $progress ?>%</div>
+              </div>
+              <div class="float-end mt-3"> 
+                <a href="">Actualizar progreso</a>
+              </div>
+            </div>
+
+
+
+
 
           </div>
         </div>
@@ -102,16 +138,3 @@
 </section>
 
 <?= $this->endSection() ?>
-
-<script>
-  const video = document.getElementById('lesson_video');
-  let watchedPorcentage = 0;
-
-  video.addEventListener('timeupdate', () => {
-    const percentage = Math.floor(( video.currentTime / video.duration) * 100 );
-    watchedPorcentage = Math.max(watchedPorcentage, porcetage);
-  });
-
-  console.log(video);
-  
-</script>

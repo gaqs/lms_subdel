@@ -15,7 +15,7 @@
       <div class="col-md-5 col-lg-4 col-xl-4 mx-auto mt-4">
         <h6 class="text-uppercase mb-4 font-weight-bold">CONTACTO</h6>
         <p><i class="fa fa-home mr-3"></i> Av. Presidente Ibañez #600.<br>Edificio Consistorial II<br></p>
-        <p><i class="fa fa-envelope mr-3"></i> lukasparaemprender@puertomontt.cl<br><i class="fa fa-envelope mr-3"></i> lukasparaemprender@gmail.com</p>
+        <p><i class="fa fa-envelope mr-3"></i> contacto@subdelpuertomontt.cl<br><i class="fa fa-envelope mr-3"></i> universidadabierta@gmail.com</p>
         <p><i class="fa fa-phone mr-3"></i> (+65) 2 261315<br><i class="fa fa-phone mr-3"></i> (+65) 2 261306</p>
         <p></p>
       </div>
@@ -55,11 +55,130 @@
 </footer>
 <!-- Footer -->
 
-
-
 </body>
 </html>
 <script src="https://unpkg.com/@popperjs/core@^2.0.0"></script>
 <script type="text/javascript" src="<?= base_url('dist/bootstrap-5.3.3/js/bootstrap.js'); ?>"></script>
 <script type="text/javascript" src="<?= base_url('js/jquery-3.7.1.min.js'); ?>"></script>
+<script type="text/javascript" src="<?= base_url('js/video.min.js'); ?>"></script>
 <script type="text/javascript" src="<?= base_url('js/scripts.js'); ?>"></script>
+<script>  
+
+  let lessonID = window.location.href.split('/').pop(); //id de la leccion desde url
+  //progress lessons
+  $(document).ready(function() {
+
+    //video % de termino
+    const video = document.getElementById('lesson_video');
+    if( video ){
+      let watchedPercentage = 0;
+      video.addEventListener('timeupdate', () => {
+          const percentage = Math.floor((video.currentTime / video.duration) * 100);
+          watchedPercentage = Math.max(watchedPercentage, percentage);
+
+          console.log(watchedPercentage);
+      });
+
+      //actualizacion % en base de datos cuando este termina, si el video se completa o se hace click en el check
+      video.addEventListener('ended', () => { sendLessonProgress( lessonID, watchedPercentage); });
+      video.addEventListener('pause', () => { sendLessonProgress( lessonID, watchedPercentage); });
+      video.addEventListener('beforeunload', () => { sendLessonProgress( lessonID, watchedPercentage); });
+      
+    }
+
+    const checkboxes = document.querySelectorAll('.check_lesson');
+    checkboxes.forEach(check => {
+      check.addEventListener('change', () => {
+        const lesson_id = check.value;
+        if(check.checked){
+          sendLessonProgress(lesson_id, '100');
+        }else{
+          sendLessonProgress(lesson_id, '0');
+        }
+      });
+    })
+
+  });
+
+  function sendLessonProgress(id,progress){
+    $.ajax({
+      type: 'POST',
+      url: "<?= base_url('lesson/progress') ?>",
+      data: 'lesson_id='+id+'&progress='+progress,
+      success: function(data){
+        console.log(data);
+          console.log('progreso actualizado!');
+      }
+    });
+  }
+  
+</script>
+<script type="module">
+  //pdf % de termino
+  const pdfjs = await import('<?= base_url('dist/pdfjs-4.9.124/build/pdf.mjs'); ?>');
+  pdfjs.GlobalWorkerOptions.workerSrc = '<?= base_url('dist/pdfjs-4.9.124/build/pdf.worker.mjs'); ?>';
+
+  const canvas = document.getElementById('pdf_canvas');
+    if( canvas ){
+      let pdfDoc        = null;
+      let currentPage   = 1;
+      let zoomLevel     = 1;
+      const pdfCanvas   = document.getElementById('pdf_canvas');
+      const ctx         = pdfCanvas.getContext('2d');
+
+      const totalPagesElement  = document.getElementById('total_pages');
+      const currentPageElement = document.getElementById('current_page');
+
+      const contentFile = '<?= isset($content->file) ? base_url('public/uploads/lessons/'.$content->file) : ''; ?>'
+      //carga de pdf
+      pdfjsLib.getDocument(contentFile).promise.then( (pdf) => {
+        pdfDoc = pdf;
+        totalPagesElement.textContent = pdfDoc.numPages;
+        renderPage(currentPage);
+      });
+
+      function renderPage(pageNum){
+        pdfDoc.getPage(pageNum).then( (page) => {
+          const viewport = page.getViewport({scale: zoomLevel});
+          pdfCanvas.height = viewport.height;
+          pdfCanvas.width = viewport.width;
+
+          const renderContext = {
+            canvasContext: ctx,
+            viewport:viewport
+          };
+          page.render(renderContext);
+          currentPageElement.textContent = pageNum;
+        })
+      }
+
+      // Navegar a la siguiente página
+      document.getElementById('next_page').addEventListener('click', () => {
+        if (currentPage >= pdfDoc.numPages) return;
+        currentPage++;
+        renderPage(currentPage);
+        let porcentage = (currentPage * 100) / pdfDoc.numPages;
+
+        sendLessonProgress(lessonID, porcentage);
+      });
+
+      document.getElementById('prev_page').addEventListener('click', () => {
+        if (currentPage <= 1) return;
+        currentPage--;
+        renderPage(currentPage);
+      });
+
+      document.getElementById('zoomin').addEventListener('click', () => {
+        zoomLevel += 0.1
+        renderPage(currentPage)
+      });
+
+      document.getElementById('zoomout').addEventListener('click', () => {
+        if( zoomLevel > 1 ){
+          zoomLevel -= 0.1;
+          renderPage(currentPage);
+        }
+      });
+
+    }
+</script>

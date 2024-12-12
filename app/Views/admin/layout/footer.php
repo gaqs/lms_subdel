@@ -21,7 +21,7 @@
 <script type="text/javascript" src="<?= base_url('js/scripts.js'); ?>"></script>
 
 <!-- scripts -->
-<script>
+<script type="text/javascript">
   $(document).ready(function() {
 
     $('a[data-bs-toggle="tab"]').on('show.bs.tab', function(e) {
@@ -67,16 +67,5 @@
         ['fullscreen']
       ]
     });
-
   });
-
-  const player = videojs('lesson_video');
-
-  console.log(player);
-
-  player.on('pause', () => {
-    const currentTime = player.currentTime();
-    console.log(`The video was paused at: ${currentTime} seconds.`);
-  })
-  
 </script>

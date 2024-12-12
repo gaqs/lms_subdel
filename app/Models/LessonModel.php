@@ -56,17 +56,20 @@ class LessonModel extends Model
 
     protected function updateCourseDuration(array $data)
     {
-        $course_id = $data['data']['course_id'];
+        if(!empty($data)){
+            $course_id = $data['data']['course_id'];
     
-        // Obtiene la duración total del curso
-        $query = $this->select('SEC_TO_TIME(SUM(TIME_TO_SEC(duration))) as total_duration')
-                              ->where('course_id', $course_id)
-                              ->get()
-                              ->getRow();
-    
-        // Actualiza la columna "duration" en la tabla "courses"
-        $courseModel = new \App\Models\CourseModel();
-        $courseModel->update($course_id, ['duration' => $query->total_duration]);
+            // Obtiene la duración total del curso
+            $query = $this->select('SEC_TO_TIME(SUM(TIME_TO_SEC(duration))) as total_duration')
+                                ->where('course_id', $course_id)
+                                ->get()
+                                ->getRow();
+        
+            // Actualiza la columna "duration" en la tabla "courses"
+            $courseModel = new \App\Models\CourseModel();
+            $courseModel->update($course_id, ['duration' => $query->total_duration]);
+        }
+        
     }
 
 }

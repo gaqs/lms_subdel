@@ -23,6 +23,7 @@ $routes->get('/comment/delete',       'Comment::delete');
 
 $routes->get('/courses/join',         'Course::join',    ['filter' => 'group:admin,user']);
 $routes->get('/lesson/show/(:num)',   'Lesson::show/$1', ['filter' => 'group:admin,user']);
+$routes->post('/lesson/progress',     'Lesson::progress', ['filter' => 'group:admin,user']);
 
 $routes->group('user', ['filter' => 'group:admin,user'], static function($routes){
 
