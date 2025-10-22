@@ -65,51 +65,65 @@
 <script>  
 
   let lessonID = window.location.href.split('/').pop(); //id de la leccion desde url
+  let courseID = '<?= isset($course->id) ? $course->id : ''; ?>'; //id del curso desde php
+  //verificar progreso solo si se esta en url de lesson
+
   //progress lessons
   $(document).ready(function() {
 
-    //video % de termino
-    const video = document.getElementById('lesson_video');
-    if( video ){
-      let watchedPercentage = 0;
-      video.addEventListener('timeupdate', () => {
-          const percentage = Math.floor((video.currentTime / video.duration) * 100);
-          watchedPercentage = Math.max(watchedPercentage, percentage);
+    if( window.location.pathname.includes('/lesson') ){
+      checkLiveProgress(courseID);
+      //video % de termino
+      const video = document.getElementById('lesson_video');
+      if( video ){
+        let watchedPercentage = 0;
+        video.addEventListener('timeupdate', () => {
+            const percentage = Math.floor((video.currentTime / video.duration) * 100);
+            watchedPercentage = Math.max(watchedPercentage, percentage);
+        });
 
-          console.log(watchedPercentage);
-      });
+        //actualizacion % en base de datos cuando este termina, si el video se completa o se hace click en el check
+        video.addEventListener('ended', () => { sendLessonProgress( lessonID, watchedPercentage, courseID); });
+        video.addEventListener('pause', () => { sendLessonProgress( lessonID, watchedPercentage, courseID); });
+        video.addEventListener('beforeunload', () => { sendLessonProgress( lessonID, watchedPercentage, courseID); });
+      }
 
-      //actualizacion % en base de datos cuando este termina, si el video se completa o se hace click en el check
-      video.addEventListener('ended', () => { sendLessonProgress( lessonID, watchedPercentage); });
-      video.addEventListener('pause', () => { sendLessonProgress( lessonID, watchedPercentage); });
-      video.addEventListener('beforeunload', () => { sendLessonProgress( lessonID, watchedPercentage); });
-      
+      const checkboxes = document.querySelectorAll('.check_lesson');
+      checkboxes.forEach(check => {
+        check.addEventListener('change', () => {
+          const lesson_id = check.value;
+          let progress = (check.checked) ? '100' : '0';
+          sendLessonProgress(lesson_id, progress, courseID);
+        });
+      })
     }
-
-    const checkboxes = document.querySelectorAll('.check_lesson');
-    checkboxes.forEach(check => {
-      check.addEventListener('change', () => {
-        const lesson_id = check.value;
-        if(check.checked){
-          sendLessonProgress(lesson_id, '100');
-        }else{
-          sendLessonProgress(lesson_id, '0');
-        }
-      });
-    })
-
   });
 
-  function sendLessonProgress(id,progress){
+  function sendLessonProgress(id,progress,course_id = courseID){
     $.ajax({
       type: 'POST',
       url: "<?= base_url('lesson/progress') ?>",
-      data: 'lesson_id='+id+'&progress='+progress,
+      data: 'lesson_id='+id+'&progress='+progress+'&course_id='+course_id,
       success: function(data){
-        console.log(data);
-          console.log('progreso actualizado!');
+        checkLiveProgress(course_id);
       }
     });
+  }
+
+  function checkLiveProgress(id){
+    $.ajax({
+      type: 'POST',
+      url: "<?= base_url('lesson/check_live_progress') ?>",
+      data: 'course_id='+id,
+      success: function(data){
+        //actualizacion visual de barra progress
+        progressContainer = document.querySelector('#progress_bar .progress');
+        progressBar = progressContainer.querySelector('#progress_bar .progress-bar');
+        progressBar.style.width = data+'%';
+        progressBar.textContent = data+'%';
+        progressContainer.setAttribute('aria-valuenow', data);
+      }
+    })
   }
   
 </script>

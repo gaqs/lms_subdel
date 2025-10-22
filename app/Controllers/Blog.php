@@ -21,7 +21,7 @@ class Blog extends BaseController
         $this->categoryModel = new CategoryModel();
         $this->commentModel = new CommentModel();
 
-        $this->pagintation = Services::pager();
+        $this->pagination = Services::pager();
     }
 
     public function index()

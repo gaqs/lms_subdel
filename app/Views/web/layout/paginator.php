@@ -2,7 +2,7 @@
 /**
  * @var \CodeIgniter\Pager\PagerRenderer $pager
  */
-
+if( isset($pager) ):
 $pager->setSurroundCount(2);
 ?>
 
@@ -43,3 +43,4 @@ $pager->setSurroundCount(2);
 		<?php endif ?>
 	</ul>
 </nav>
+<?php endif; ?>

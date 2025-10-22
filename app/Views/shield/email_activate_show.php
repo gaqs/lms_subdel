@@ -1,6 +1,6 @@
 <?= $this->extend('web/layout/app') ?>
 
-<?= $this->section('title') ?><?= lang('Auth.useMagicLink') ?> <?= $this->endSection() ?>
+<?= $this->section('title') ?><?= lang('Auth.emailActivateTitle') ?> <?= $this->endSection() ?>
 
 <?= $this->section('main') ?>
 
@@ -14,7 +14,7 @@
             <?php endif ?>
 
             <p><?= lang('Auth.emailActivateBody') ?></p>
-
+            <br>
             <form action="<?= url_to('auth-action-verify') ?>" method="post">
                 <?= csrf_field() ?>
 
@@ -27,7 +27,7 @@
 
                 <div class="d-flex justify-content-between col-12 mx-auto m-3">
                   <a href="<?= base_url('logout');?>" type="submit" class="btn btn-secondary btn-block">Desconectar</a>
-                  <button type="submit" class="btn btn-success btn-block"><i class="bi bi-send"></i> <?= lang('Auth.send') ?></button>
+                  <button type="submit" class="btn btn-success btn-block"><i class="bi bi-send"></i> Validar</button>
                 </div>
 
             </form>

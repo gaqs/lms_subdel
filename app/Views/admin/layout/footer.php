@@ -14,8 +14,6 @@
 <script type="text/javascript" src="<?= base_url('dist/trumbowyg-2.28.0/plugins/resizimg/trumbowyg.resizimg.js'); ?>"></script>
 <script type="text/javascript" src="<?= base_url('dist/trumbowyg-2.28.0/langs/es.js');?>"></script>
 
-<!--<script type="text/javascript" src="<?= base_url('js/jquery-sortable.js'); ?>"></script>-->
-
 <script type="text/javascript" src="<?= base_url('js/video.min.js'); ?>"></script>
 
 <script type="text/javascript" src="<?= base_url('js/scripts.js'); ?>"></script>

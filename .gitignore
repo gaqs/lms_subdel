@@ -129,3 +129,7 @@ public/uploads/*
 
 #psd test files
 *.psd
+
+#python script cache files
+development_changes.py
+cambios.txt

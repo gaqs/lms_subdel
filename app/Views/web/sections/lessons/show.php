@@ -14,7 +14,8 @@
           <p class="course_description"><?= $course->resume ?></p>
           <hr>
         </div>
-        <div class="col-md-8 text-black">
+        
+        <div class="col-md-8 text-black order-2 order-md-1">
           
           <!-- lesson content -->
           <h4 class="mt-3"><?= $content->title ?></h4>
@@ -61,7 +62,7 @@
 
         </div> 
 
-        <div class="col-md-4 lessons_container">
+        <div class="col-md-4 lessons_container order-1 order-md-2">
           <div class="card border-0">
             <div class="card-body">
               <div class="card-title">
@@ -117,23 +118,36 @@
               <div class="mb-3">
                 <h5>Progreso del curso</h5>
               </div>
-              <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="<?= $progress ?>" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar bg-success" style="width: <?= $progress ?>%"><?= $progress ?>%</div>
+
+              <div class="progress" role="progressbar" aria-label="Progreso" aria-valuenow="" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success"></div>
               </div>
+              
               <div class="float-end mt-3"> 
                 <a href="">Actualizar progreso</a>
               </div>
             </div>
 
+            <?php
+                if( isset($course_progress) && $course_progress->complete == 1 ):
+                  $formatted_date = date('d-m-Y \a \l\a\s H:i \h\o\r\a\s', strtotime($course_progress->updated_at));
+            ?>
+            <hr>
+            
+            <div id="certificado" class="row mt-3">
+              <div class="col-md-12 text-center">
+                  <p><h5>¡Felicidades!</h5> Con fecha <?= $formatted_date ?>, has completado este curso.<br>Obten tu certificado haciendo click en el siguiente botón.</p>
+                  <a class="btn btn-success" href="<?= base_url('certificate?id='.$course_progress->id.'&token='.$course_progress->token) ?>">Obtener cerificado</a>
+              </div>
+            </div>
 
-
-
+            <?php
+              endif;
+            ?>
 
           </div>
         </div>
-
       </div>
-
   </div>
 </section>
 

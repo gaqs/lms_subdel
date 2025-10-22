@@ -235,5 +235,16 @@ svg:hover {
   color: #146c43;
 }
 
+/* responsive */
+/* Styles for screens smaller than 768px */
+@media screen and (max-width: 767px) {
+
+  .course_side{
+    margin-top: -0;
+    margin-top: 10px;
+  }
+
+
+}
 
 

@@ -7,7 +7,7 @@ use CodeIgniter\Config\BaseConfig;
 class Email extends BaseConfig
 {
     public string $fromEmail  = 'noreply@subdelpuertomontt.cl';
-    public string $fromName   = 'SUBDEL Puerto Montt';
+    public string $fromName   = 'LMS Puerto Montt';
     public string $recipients = '';
 
     /**
@@ -28,17 +28,17 @@ class Email extends BaseConfig
     /**
      * SMTP Server Hostname
      */
-    public string $SMTPHost = 'mail.subdelpuertomontt.cl';
+    public string $SMTPHost = '';
 
     /**
      * SMTP Username
      */
-    public string $SMTPUser = 'noreply@subdelpuertomontt.cl';
+    public string $SMTPUser = '';
 
     /**
      * SMTP Password
      */
-    public string $SMTPPass = 'Ga1SuLeCXK82';
+    public string $SMTPPass = '';
 
     /**
      * SMTP Port
@@ -77,7 +77,7 @@ class Email extends BaseConfig
     /**
      * Type of mail, either 'text' or 'html'
      */
-    public string $mailType = 'text';
+    public string $mailType = 'html';
 
     /**
      * Character set (utf-8, iso-8859-1, etc.)
@@ -118,4 +118,19 @@ class Email extends BaseConfig
      * Enable notify message from server
      */
     public bool $DSN = false;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->SMTPHost = env('email.test.SMTPHost');
+        $this->SMTPUser = env('email.test.SMTPUser');
+        $this->SMTPPass = env('email.test.SMTPPass');
+        $this->SMTPPort = env('email.test.SMTPPort');
+
+    }
+
 }
+
+

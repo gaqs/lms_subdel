@@ -28,6 +28,8 @@
 
   <script type="text/javascript" src="<?= base_url('js/jquery-3.7.1.min.js'); ?>"></script>
 
+  <script type="text/javascript" src="<?= base_url("dist/Sortable-1.15.6/Sortable.min.js"); ?>"></script>
+
 </head>
 <body>
   

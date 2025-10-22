@@ -28,9 +28,8 @@ class Course extends BaseController
         $this->lessonModel   = new LessonModel();
         $this->moduleModel   = new ModuleModel();
         $this->commentModel  = new CommentModel();
-
-        $this->pagintation = Services::pager();
     }
+    
     public function index()
     {
         $categories = $this->request->getGET('cat');

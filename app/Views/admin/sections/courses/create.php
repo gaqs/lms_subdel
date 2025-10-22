@@ -141,4 +141,32 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	
+	document.addEventListener('DOMContentLoaded', function(){
+
+		const moduleLessonContainers = document.querySelectorAll('#module_lesson_container');
+		moduleLessonContainers.forEach(container => {
+			new Sortable(container, {
+				handle: '.handle_module',
+				animation: 150,
+				ghostClass: '.bg-primary-subtle'
+			});
+		});
+
+		
+		const moduleContainers = document.querySelectorAll('#module_container');
+		moduleContainers.forEach(container => {
+			new Sortable(container, {
+				handle: '.handle_lesson',
+				animation: 150,
+				ghostClass: 'bg-primary-subtle'
+			});
+		});
+	})
+
+
+</script>
+
 <?= $this->endSection() ?>

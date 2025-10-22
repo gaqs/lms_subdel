@@ -16,7 +16,7 @@
     <div class="row text-white">
       <div class="col align-self-center">
 
-        <img src="<?= base_url('img/logo_muni.png');?>" alt="" class="mb-3" style="width:200px;">
+        <img src="<?= base_url('img/logo_muni_2.png');?>" alt="" class="mb-3" style="width:300px;">
         <h5>Plataforma de aprendizaje online</h5>
         <h1 class="display-3 lh-1 fw-bolder">Únete & <span class="text-success">aprende</span> de manera efectiva</h1>
         <p>Explora nuevas habilidades más allá del mundo del conocimiento y pierdete en la libertad de la creatividad.</p>
@@ -154,7 +154,7 @@
         <h3 class="fw-bold mb-1 lh-1">Acerca de Nosotros</h3>
         <p class="text-secondary">¿Quienes somos?</p>
       </div>
-      <div class="col-md-7">
+      <div class="col-md-6 px-3">
         <p>Bienvenido/a a nuestra plataforma de aprendizaje en línea, una iniciativa de la <b>Subdirección de Desarrollo Económico Local</b> de la Municipalidad de Puerto Montt. Este espacio está diseñado para potenciar el desarrollo personal y profesional de nuestra comunidad.</p>
         <p>Aquí encontrarás una amplia variedad de cursos cuidadosamente seleccionados, impartidos por expertos instructores comprometidos con tu crecimiento.</p>
         <p>Nuestra misión es hacer que el aprendizaje sea:</p>
@@ -177,8 +177,7 @@
         </p>
         <p>¡Únete a nuestra comunidad educativa y comienza tu camino hacia el éxito!</p>
       </div>
-      <div class="col-md-5">
-        <img src="<?= base_url('public/img/dideco_logo_2.png') ?>" alt="" class="w-100">
+      <div class="col-md-6">
         <img src="<?= base_url('public/img/logo_muni.png') ?>" alt="" class="w-100">
       </div>
     </div>

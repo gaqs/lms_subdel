@@ -55,7 +55,7 @@
           <?php endforeach; ?>
         </div>
 
-        <?= $pager->links('res', 'bootstrap') ?>
+        <?= isset($pager) ? $pager->links('res', 'bootstrap') : '' ?>
         
     </div>
 

@@ -88,11 +88,11 @@ class Course extends BaseController
         $data['action'] = 'edit';
         $course = $this->courseModel->asObject()->find($id);
 
-        $modules = $this->moduleModel->where('course_id', $course->id)->asObject()->findAll();
+        $modules = $this->moduleModel->where('course_id', $course->id)->orderBy('order_id')->asObject()->findAll();
 
         $lessons = [];
         foreach ($modules as $module) {
-            $lessons[$module->id] = $this->lessonModel->where('module_id', $module->id)->asObject()->findAll();
+            $lessons[$module->id] = $this->lessonModel->where('module_id', $module->id)->orderBy('order_id')->asObject()->findAll();
         }
 
         $data['course'] = $course;
@@ -105,6 +105,7 @@ class Course extends BaseController
     public function update($id = null)
     {
         $data = $this->request->getPost();
+        $course_id = $data['course_id'];
 
         if(!$this->modelRules->run($data, 'course_rules')){ //run rules of validation of data for blog
             return redirect()->back()->withInput()->with('errors', $this->modelRules->getErrors());
@@ -115,7 +116,7 @@ class Course extends BaseController
         $publish = isset($data['publish']) ? 'publish':'draft';
 
         $courseData = [
-            'id' => $data['course_id'],
+            'id' => $course_id,
             'title' => $data['title'],
             'resume' => $data['resume'],
             'category_id' => (int)$data['category'],
@@ -128,6 +129,26 @@ class Course extends BaseController
 
         $this->courseModel->save($courseData);
 
+        $modules = $data['course'][$course_id]; //course[id_curso][order] = id_modulo - El curso siempre va a ser uno solo
+        $lessons = $data['module']; //module[id_modulo][order] = id_lesson
+
+        //actualizar orden de modulos por id
+        if(!empty($modules)){
+            foreach ( $modules as $order => $module_id){
+                $order = $order + 1;
+                $this->moduleModel->update($module_id, ['order_id' => $order]);
+            }
+        }
+        //actualizar orden de lecciones por id
+        if(!empty($lessons)){
+            foreach( $lessons as $module_id => $lesson_array){
+                foreach( $lesson_array as $order => $lesson_id){
+                    $order = $order + 1;
+                    $this->lessonModel->update($lesson_id, ['order_id' => $order]);
+                }
+            }
+        }
+        
         return redirect()->to(base_url('admin/courses/edit/'.$data['course_id']))->with('success', 'Curso editado correctamente.');
     }
 

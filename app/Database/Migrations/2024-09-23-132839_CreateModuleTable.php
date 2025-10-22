@@ -20,6 +20,12 @@ class CreateModuleTable extends Migration
                 'constraint' => 11,
                 'unsigned' => true,
             ],
+            'order_id' => [
+                'type' => 'INT',
+                'null' => true,
+                'unsigned' => true,
+                'default' => 1,
+            ],
             'title' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,

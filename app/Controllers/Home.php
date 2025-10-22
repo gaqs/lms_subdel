@@ -4,6 +4,8 @@ namespace App\Controllers;
 use App\Models\CategoryModel;
 use App\Models\CourseModel;
 
+use Spipu\Html2Pdf\Html2Pdf;
+
 use Config\Services;
 
 class Home extends BaseController
@@ -69,5 +71,79 @@ class Home extends BaseController
         }
 
         
+    }
+
+
+    public function certificate()
+    {
+        $db = db_connect();
+
+        $id = $this->request->getGet('id');
+        $token = $this->request->getGet('token');
+
+        if(!$id || !$token){
+            return redirect()->to(base_url())->with('error', 'No es posible generar el certificado. Inténtalo de nuevo.');
+        }
+
+        //consulta a la base de datos user_has_courses que tiene user_id y course_id
+        $query = $db->table('user_has_courses')
+                    ->select('users.name,users.lastname,courses.title as course_name,courses.duration,user_has_courses.id,user_has_courses.token,user_has_courses.code,user_has_courses.updated_at')
+                    ->join('users', 'users.id = user_has_courses.user_id')
+                    ->join('courses', 'courses.id = user_has_courses.course_id')
+                    ->where('user_has_courses.id', $id)
+                    ->where('user_has_courses.token', $token)
+                    ->where('user_has_courses.complete', 1)
+                    ->get()
+                    ->getResultObject();
+
+        $data['course'] = $query[0];
+
+        // Generar el contenido HTML para el PDF
+        $htmlContent = view('web/layout/certificate', $data);
+
+        // Crear el PDF
+        $html2pdf = new Html2Pdf('L', 'A4', 'es', true, 'UTF-8', 3);
+        $html2pdf->pdf->SetDisplayMode('fullpage');
+        $html2pdf->writeHTML($htmlContent);
+
+        // Guardar el PDF en un archivo temporal
+        $filePath = ROOTPATH . 'public/pdfs/certificate.pdf';
+        $html2pdf->output($filePath, 'F');
+
+        $data['pdfPath'] = base_url('public/pdfs/certificate.pdf');
+
+        // Pasar la ruta del archivo a la vista
+        return view('web/sections/static/certificate', $data);
+    }
+
+    public function verify()
+    {
+        $token = $this->request->getGet('token');
+        $code = $this->request->getGet('code');
+
+        $db = db_connect();
+        $query = $db->table('user_has_courses')
+                    ->select('users.name,users.lastname,courses.title as course_name,courses.duration,user_has_courses.id,user_has_courses.token,user_has_courses.code,user_has_courses.updated_at')
+                    ->join('users', 'users.id = user_has_courses.user_id')
+                    ->join('courses', 'courses.id = user_has_courses.course_id');
+                    
+        if( $token ){
+            $query->where('user_has_courses.token', $token);
+        }else if($code){
+            $query->where('user_has_courses.code', 'CERT-'.$code);
+        }else{
+            $query->where('user_has_courses.id', 0); //no results
+        }
+
+        $query = $query->get()
+                       ->getResultObject();
+
+        if(empty($query)){
+            $data['error'] = 'Ingrese el código del certificado o ingrese via link';
+        }else{
+            $data['verify'] = $query[0];
+        }    
+
+        return view('web/sections/static/verify', $data);
     }
 }

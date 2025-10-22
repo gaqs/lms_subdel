@@ -10,6 +10,8 @@ service('auth')->routes($routes);
 
 $routes->get('/',                     'Home::index');
 $routes->post('/help',                'Home::help');
+$routes->get('/certificate',          'Home::certificate',      ['filter' => 'group:admin,user']);
+$routes->get('/verify-certificate',   'Home::verify');
 
 $routes->get('/blogs',                'Blog::index');
 $routes->get('/blogs/show/(:num)',    'Blog::show/$1');
@@ -22,8 +24,10 @@ $routes->post('/comment/update',      'Comment::update');
 $routes->get('/comment/delete',       'Comment::delete');
 
 $routes->get('/courses/join',         'Course::join',    ['filter' => 'group:admin,user']);
-$routes->get('/lesson/show/(:num)',   'Lesson::show/$1', ['filter' => 'group:admin,user']);
-$routes->post('/lesson/progress',     'Lesson::progress', ['filter' => 'group:admin,user']);
+
+$routes->get('/lesson/show/(:num)',           'Lesson::show/$1',            ['filter' => 'group:admin,user']);
+$routes->post('/lesson/progress',             'Lesson::progress',           ['filter' => 'group:admin,user']);
+$routes->post('/lesson/check_live_progress',  'Lesson::check_live_progress',['filter' => 'group:admin,user']);
 
 $routes->group('user', ['filter' => 'group:admin,user'], static function($routes){
 

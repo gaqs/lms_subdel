@@ -12,7 +12,7 @@ class ModuleModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['course_id','title','duration','description','created_at','updated_at'];
+    protected $allowedFields    = ['course_id','title','order_id','duration','description','created_at','updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

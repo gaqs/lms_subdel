@@ -186,3 +186,42 @@ function type_lesson_file($file_name)
     echo '<i class="bi bi-file-earmark"></i>';
   }
 }
+
+function generate_certify_token() 
+{
+    $segments = [];
+    for ($i = 0; $i < 4; $i++) {
+        $segments[] = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
+    }
+    return implode('-', $segments);
+}
+
+function generate_certify_code() 
+{
+    return 'CERT-'.strtoupper(substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8));
+}
+
+function beautiful_date($date) 
+{
+  $formatter = new IntlDateFormatter(
+      'es_ES',
+      IntlDateFormatter::LONG,
+      IntlDateFormatter::NONE,
+      'America/Santiago',
+      IntlDateFormatter::GREGORIAN,
+      "d 'de' MMMM 'del' y"
+  );
+
+  $timestamp = strtotime($date);
+  return ucfirst($formatter->format($timestamp)); // capitaliza la primera letra
+}
+
+
+function round_duration_to_hours($duration) 
+{
+    list($hours, $minutes, $seconds) = explode(':', $duration);
+    $totalHours = $hours + ($minutes / 60) + ($seconds / 3600);
+
+    // Redondea hacia arriba al número entero más cercano
+    return ceil($totalHours);
+}

@@ -14,6 +14,7 @@ class User extends ShieldLogin
     protected $userRules;
     protected $courseModel;
     protected $blogModel;
+    
     public function __construct()
     {
         $this->courseModel = new CourseModel();
