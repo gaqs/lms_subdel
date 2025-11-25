@@ -75,7 +75,7 @@
                       </div>
                       <h5 class="card-title mt-3"><?= $c->title; ?></h5>
                       <p class="card-text">
-                        <?= substr( $c->description, 0, 100).'...'; ?>
+                        <?= strip_tags(substr( $c->description, 0, 200)).'...'; ?>
                       </p>
                       <small>
                         <div class="row">
@@ -116,7 +116,7 @@
                       </div>
                       <h5 class="card-title mt-3"><?= $c->title; ?></h5>
                       <p class="card-text">
-                        <?= substr( $c->description, 0, 100).'...'; ?>
+                        <?= strip_tags(substr( $c->description, 0, 200)).'...'; ?>
                       </p>
                       <small>
                         <div class="row">

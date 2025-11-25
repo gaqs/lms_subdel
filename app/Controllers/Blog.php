@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\BlogModel;
 use App\Models\CategoryModel;
 use App\Models\CommentModel;
@@ -15,6 +14,7 @@ class Blog extends BaseController
     protected $categoryModel;
     protected $commentModel;
     protected $pagination;
+    
     public function __construct()
     {
         $this->blogModel = new BlogModel();
@@ -71,7 +71,7 @@ class Blog extends BaseController
                                                ->where('comments.section', 'blogs')
                                                ->where('comments.section_id', $id)->paginate(5, 'res');
 
-        $data['comment_pager'] = $this->commentModel->pager;
+        $data['comment_pager'] = $this->commentModel->pager ?? '';
 
 
         $db = db_connect();

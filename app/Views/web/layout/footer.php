@@ -26,8 +26,8 @@
         <h6 class="text-uppercase mb-4 font-weight-bold">Links Útiles</h6>
         <p><a href="https://www.puertomontt.cl/" target="_blank">Municipalidad Puerto Montt</a></p>
         <p><a href="http://www.ulagos.cl/" target="_blank">Universidad de los Lagos</a></p>
-        <p><a href="http://www.ulagos.cl/category/campus-pto-montt/" target="_blank">ULL Campus Puerto Montt</a></p>
-        <p><a href="<?= base_url('admin/login'); ?>" target="_blank" class="">Acceso Administrador</a></p>
+        <p><a href="<?= base_url('terms-and-conditions') ?>" target="_blank">Terminos y Condiciones</a></p>
+        <p><a href="<?= base_url('verify-certificate'); ?>" target="_blank" class="">Verificar certificado</a></p>
       </div>
 
     </div>

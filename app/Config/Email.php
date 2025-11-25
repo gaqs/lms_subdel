@@ -124,10 +124,10 @@ class Email extends BaseConfig
     {
         parent::__construct();
 
-        $this->SMTPHost = env('email.test.SMTPHost');
-        $this->SMTPUser = env('email.test.SMTPUser');
-        $this->SMTPPass = env('email.test.SMTPPass');
-        $this->SMTPPort = env('email.test.SMTPPort');
+        $this->SMTPHost = env('email.default.SMTPHost');
+        $this->SMTPUser = env('email.default.SMTPUser');
+        $this->SMTPPass = env('email.default.SMTPPass');
+        $this->SMTPPort = env('email.default.SMTPPort');
 
     }
 

@@ -59,6 +59,7 @@ class Course extends BaseController
 
     public function show($id)
     {
+        //all info of the course
         $course = $this->courseModel->select('courses.*, levels.level as level, categories.name as category_name, users.name as username, users.id as userid, users.lastname as userlastname, auth_identities.secret as useremail')
                                     ->join('categories', 'courses.category_id = categories.id')
                                     ->join('levels', 'courses.level_id = levels.id')
@@ -66,16 +67,30 @@ class Course extends BaseController
                                     ->join('auth_identities', 'courses.instructor_id = auth_identities.user_id')
                                     ->asObject()->find($id);
         
+        //if user has course on wishlist
         $db = db_connect();
         $builder = $db->table('user_has_wishes');
         
         $data['has_wish'] = '';
         if( isset( auth()->user()->id )){
             $data['has_wish'] = $builder->where('user_id', auth()->user()->id )
-                                    ->where('course_id', $course->id)
-                                    ->get()->getRow();
+                                        ->where('course_id', $course->id)
+                                        ->get()->getRow();
         }
-                      
+
+        //if loged user is doing the course
+        $data['is_doing'] = false;
+        if( isset( auth()->user()->id )){
+            $user_course = $db->table('user_has_courses')
+                              ->where('user_id', auth()->user()->id )
+                              ->where('course_id', $id)
+                              ->get()->getRow();
+            if( !empty($user_course) ){
+                $data['is_doing'] = true;
+            }
+        }
+        
+        //modules and lessons of course
         $modules = $this->moduleModel->where('course_id', $course->id)->asObject()->findAll();
 
         if( $modules != ''){
@@ -96,7 +111,7 @@ class Course extends BaseController
             $data['lessons'] = $lessons;
         }
 
-        //Comments and pager, replies are in the view comments/show
+        //comments and pager, replies are in the view comments/show
         $data['comments'] = $this->commentModel->select('comments.*, CONCAT(users.name," ", users.lastname) AS commentator')
                                                ->join('users', 'users.id = comments.commentator_id')
                                                ->where('comments.section', 'courses')

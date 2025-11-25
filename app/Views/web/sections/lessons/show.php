@@ -9,15 +9,15 @@
   <div class="container-fluid title_container text-white">
 
       <div class="row">
+        <!-- title -->
         <div class="col-md-12 text-black mt-4">
           <h2 class="course_title">Curso: <?= $course->title ?></h2>
           <p class="course_description"><?= $course->resume ?></p>
           <hr>
         </div>
-        
-        <div class="col-md-8 text-black order-2 order-md-1">
-          
-          <!-- lesson content -->
+
+        <!-- lesson content -->
+        <div class="col-md-8 text-black order-1 order-md-1">
           <h4 class="mt-3"><?= $content->title ?></h4>
           <p><?= $content->description ?></p>
 
@@ -35,20 +35,23 @@
           <?php elseif($ext == '.pdf'):?>
           
             <div id="pdf_navigation" class="d-flex mb-2 justify-content-center align-items-center">
-              <div id="zoom">
+
+              <div id="left_buttons" class="d-inline-flex align-items-center me-2">
                 <button id="zoomout" class="btn btn-success me-1"><i class="bi bi-zoom-out"></i></button>
-                <button id="zoomin" class="btn btn-success me-2"><i class="bi bi-zoom-in"></i></button>
+                <button id="zoomin" class="btn btn-success"><i class="bi bi-zoom-in"></i></button>
               </div>
+
               <button id="prev_page" class="btn btn-success me-2">Anterior</button>
-              <div id="page_info">
-                Página <span id="current_page">0</span> de <span id="total_pages">0</span>
-              </div>
+              <div id="page_info" class="text-center"> Página <span id="current_page">0</span> de <span id="total_pages">0</span> </div>
               <button id="next_page" class="btn btn-success ms-2">Siguiente</button>
-              <div id="zoom">
-                <button id="download" class="btn btn-success ms-2 me-1 disabled"><i class="bi bi-cloud-arrow-down"></i></button>
+
+              <div id="right_buttons" class="d-inline-flex align-items-center ms-2">
+                <button id="download" class="btn btn-success me-1 disabled"><i class="bi bi-cloud-arrow-down"></i></button>
                 <button id="print" class="btn btn-success disabled"><i class="bi bi-printer"></i></button>
               </div>
+
             </div>
+
             <div id="pdf_container" class="w-100 text-center overflow-scroll border border-black" style="height:800px;">
               <canvas id="pdf_canvas"></canvas>
             </div>
@@ -59,11 +62,12 @@
               endif;
             endif 
           ?>
-
         </div> 
 
-        <div class="col-md-4 lessons_container order-1 order-md-2">
-          <div class="card border-0">
+        <div class="col-md-4 lessons_container order-2 order-md-2">
+
+          <!-- lessons -->
+          <div class="card border-0 order-1 order-md-1">
             <div class="card-body">
               <div class="card-title">
                 <h5>Lecciones</h5>
@@ -113,7 +117,10 @@
               <?php $count_m++; endforeach; endif; ?>
 
             </div>
-            
+          </div>
+
+          <!-- progress and certified -->
+          <div class="card border-0 order-2 ordder-md-2">
             <div id="progress_bar" class="mt-5">
               <div class="mb-3">
                 <h5>Progreso del curso</h5>
@@ -144,9 +151,10 @@
             <?php
               endif;
             ?>
-
           </div>
+
         </div>
+
       </div>
   </div>
 </section>

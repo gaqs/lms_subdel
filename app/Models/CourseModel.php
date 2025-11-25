@@ -10,7 +10,7 @@ class CourseModel extends Model
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
+    protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = ['id','instructor_id','title','resume','category_id','status', 'level_id','duration','keywords','description','image','created_at','updated_at','deleted_at'];
 

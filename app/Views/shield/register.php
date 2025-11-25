@@ -58,9 +58,21 @@
                         </div>
 
                         <!-- Password (Again) -->
-                        <div class="mb-3 col-12 col-md-6">
+                        <div class="mb-4 col-12 col-md-6">
                             <label for="floatingPasswordConfirmInput" class="form-label fw-semibold text-body-secondary">Repetir contraseña</label>
                             <input type="password" class="form-control p-15" id="floatingPasswordConfirmInput" name="password_confirm" inputmode="text" autocomplete="new-password" placeholder="Contraseña" required>
+                        </div>
+
+                        <!-- Check terminos y condiciones -->
+                         <div class="mb-2 col-12 col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="terms" name="terms" <?= old('terms') ? 'checked' : '' ?> required>
+                                <label class="form-check-label" for="terms">
+                                    He leído y acepto los <a href="<?= base_url('terms-and-conditions'); ?>">Términos y condiciones</a>
+                                </label>
+                                <br>
+                                <small id="terms_warning" class="text-danger font-xs visually-hidden">Debe aceptar los términos y condiciones para registrarse.</small>
+                            </div>
                         </div>
 
                         <div class="d-grid col-12 mx-auto m-3">
@@ -74,5 +86,21 @@
             </div>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const checkbox = document.getElementById('terms');
+        const button = document.querySelector('button[type="submit"]');
+        const warning = document.getElementById('terms_warning');
+
+        //inicialmente el boton se encuentra desabilitado
+        button.disabled = !checkbox.checked;
+        warning.classList.toggle('hidden', checkbox.checked);
+
+        checkbox.addEventListener('change', function(){
+            button.disabled = !this.checked;
+            warning.classList.toggle('hidden', this.checked)
+        });
+    })
+    </script>
 
 <?= $this->endSection() ?>

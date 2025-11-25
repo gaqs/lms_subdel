@@ -13,7 +13,7 @@
 				<div class="card mb-4">
 					<div class="card-body" id="module_container">
 						<div class="d-flex mb-4" id="module_header">
-							<div class="me-auto" id="module_title"> Módulo <?= $m->order_id ?>: <?= $m->title ?> [<?= $m->id ?>]</div>
+							<div class="me-auto" id="module_title"> Módulo <?= $m->order_id ?>: <?= $m->title ?></div>
 							<div id="module_buttons">
 								<a href="<?= base_url('admin/lesson/new?course_id='.$course->id.'&module_id='.$m->id) ?>" class="btn btn-outline-success" id="create_lesson">Agregar Lección <i class="bi bi-plus"></i></a>
 								<div id="module_options" class="dropdown d-inline-block">
@@ -24,7 +24,7 @@
 										<li>
 											<form action="<?= base_url('admin/module/delete') ?>" method="POST" class="">
 												<input type="hidden" name="id" id="module_id" value="<?= $m->id ?>">
-												<button type="submit" class="dropdown-item" onclick="return confirm('¿Está seguro de querer eliminar el módulo? Se eliminarán las lecciones asociadas a este módulo.');">
+												<button type="submit" class="dropdown-item <?= $course->instructor_id == auth()->user()->id ? '' : 'disabled' ?>" onclick="return confirm('¿Está seguro de querer eliminar el módulo? Se eliminarán las lecciones asociadas a este módulo.');">
 													Eliminar
 												</button>            
 											</form>
@@ -36,10 +36,15 @@
 							</div>
 						</div>
 
-						<?php $count_l = 1; if(isset($lessons)): foreach ($lessons[$m->id] as $lesson): ?>
+						<?php 
+						$count_l = 1; 
+						if( isset($lessons) ):
+							if( isset($lessons[$m->id]) ):
+								foreach ($lessons[$m->id] as $lesson): 
+						?>
 						<div class="mb-4 card text-bg-light lesson_<?= $lesson->order_id ?>" id="lesson_container">
 							<div class="card-body d-flex p-4">
-								<div id="lesson_title" class="me-auto">Lección <?= $lesson->order_id; ?>: <?= $lesson->title ?> [<?= $lesson->id ?>]</div>
+								<div id="lesson_title" class="me-auto">Lección <?= $lesson->order_id; ?>: <?= $lesson->title ?></div>
 								<div id="lesson_options" class="me-1 dropdown d-inline-block">
 									<button class="btn btn-outline-secondary dropdown-toggle no_arrow" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
 									<ul class="dropdown-menu dropdown-menu-end">
@@ -47,7 +52,7 @@
 										<li>
 											<form action="<?= base_url('admin/lesson/delete') ?>" method="POST">
 												<input type="hidden" name="id" id="lesson_id" value="<?= $lesson->id ?>">
-												<button type="submit" class="dropdown-item" onclick="return confirm('¿Está seguro de querer eliminar la lección?.');">
+												<button type="submit" class="dropdown-item <?= $course->instructor_id == auth()->user()->id ? '' : 'disabled' ?>" onclick="return confirm('¿Está seguro de querer eliminar la lección?.');">
 													Eliminar
 												</button>            
 											</form>
@@ -58,7 +63,12 @@
 								<input type="hidden" name="module[<?= $m->id ?>][]" value="<?= $lesson->id ?>">
 							</div>
 						</div>
-						<?php $count_l++; endforeach; endif; ?>
+						<?php 
+								$count_l++; 
+								endforeach; 
+							endif;
+						endif; 
+						?>
 				
 					</div>
 				</div>

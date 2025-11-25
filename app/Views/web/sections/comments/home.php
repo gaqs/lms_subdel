@@ -234,7 +234,7 @@ $id = $uri->getSegment(3);
 
         <?php 
             } 
-            echo $comment_pager->links('res', 'bootstrap'); 
+            echo empty($comment_pager) ? $comment_pager->links('res', 'bootstrap') : '';
         ?>
 
     </div>

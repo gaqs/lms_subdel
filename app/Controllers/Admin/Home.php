@@ -37,6 +37,27 @@ class Home extends BaseController
         //
     }
 
+    public function upload_media()
+    {
+        $file = $this->request->getFile('file');
+
+        if( $file->isValid() && !$file->hasMoved() ){
+            
+            $allowedTypes = ['jpg', 'jpeg', 'png', 'pdf'];
+            $maxSize =  20000; //20 mb
+
+            $fileName = uploadMediaFile($file,'',uniqid(),'media', $allowedTypes, $maxSize);
+
+            if( $fileName ){
+                return $this->response->setJSON([
+                    'success' => true,
+                    'file' => base_url('public/uploads/media/'.$fileName),
+                ]);
+            }
+        }
+        
+    }
+
     public function delete_media()
     {
         $id = $this->request->getGet('id');

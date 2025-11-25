@@ -3,13 +3,17 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Traits\AuthorizationTrait;
 use App\Models\LessonModel;
 use App\Models\ModuleModel;
-use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\CourseModel;
 use Config\Services;
 
 class Lesson extends BaseController
 {
+    use AuthorizationTrait;
+
+    protected $courseModel;
     protected $moduleModel;
     protected $lessonModel;
     protected $modelRules;
@@ -18,6 +22,7 @@ class Lesson extends BaseController
     {
         $this->moduleModel = new ModuleModel();
         $this->lessonModel = new LessonModel();
+        $this->courseModel = new CourseModel();
         $this->modelRules = Services::validation();
     }
 
@@ -28,10 +33,13 @@ class Lesson extends BaseController
 
     public function new()
     {                  
+        $instructorId = $this->courseModel->where('id', $this->request->getGet('course_id'))
+                                          ->findColumn('instructor_id');
         //id del modulo 
         $data['lesson'] = (object)[
             'module_id' => $this->request->getGet('module_id'),
             'course_id' => $this->request->getGet('course_id'),
+            'instructor_id' => $instructorId[0]
         ]; 
         $data['action'] = 'new';
         return view('admin/sections/lessons/create', $data);
@@ -43,13 +51,24 @@ class Lesson extends BaseController
         $data = $this->request->getPost();
         $file = $this->request->getFile('file');
 
+         //verifica que el instructor del curso sea el mismo que el usuario logueado
+        if( $redirect = $this->verifyCourseInstructor( $data['course_id'] ) ){
+            return $redirect;
+        }
+
+        //reglas de validacion
         if( !$this->modelRules->run($data, 'lesson_rules')){
             return redirect()->back()->withInput()->with('errors', $this->modelRules->getErrors());
         }
 
+        //verificar el order_id de la leccion previamente creada en el modulo o si es la primera leccion
+        $lastLesson = $this->lessonModel->where('module_id', $data['module_id'])->orderBy('order_id', 'DESC')->asObject()->first();
+        $nextOrderId =  ($lastLesson) ? intval($lastLesson->order_id) + 1 : 1;
+
         $lessonData = [
             'course_id' => $data['course_id'],
             'module_id' => $data['module_id'],
+            'order_id' => $nextOrderId,
             'title' => $data['title'],
             'duration' => $data['duration'],
             'keywords' => $data['keywords'],
@@ -78,7 +97,14 @@ class Lesson extends BaseController
     public function edit($id)
     {
         $data['action'] = 'edit';
-        $data['lesson'] = $this->lessonModel->asObject()->find($id);
+        //lesson and instructor if of th course
+        $data['lesson'] = $this->lessonModel
+                                ->select('lessons.*, courses.instructor_id')
+                                ->join('courses', 'courses.id = lessons.course_id')
+                                ->where('lessons.id', $id)
+                                ->asObject()
+                                ->first();
+
         return view('admin/sections/lessons/create', $data);
     }
 
@@ -86,6 +112,12 @@ class Lesson extends BaseController
     {
         $data = $this->request->getPost();
 
+         //verifica que el instructor del curso sea el mismo que el usuario admin logueado
+        if( $redirect = $this->verifyCourseInstructor( $data['course_id'] ) ){
+            return $redirect;
+        }
+
+        //reglas de validacion
         if( !$this->modelRules->run($data, 'lesson_rules')){
             return redirect()->back()->withInput()->with('errors', $this->modelRules->getErrors());
         }
@@ -106,7 +138,7 @@ class Lesson extends BaseController
 
         $this->lessonModel->save($lessonData);
 
-        return redirect()->back()->withInput()->with('success', 'Lección editada correctamente');
+        return redirect()->to(base_url('admin/lesson/edit/'.$data['lesson_id']))->with('success', 'Lección editada correctamente');
     }
 
     public function delete()

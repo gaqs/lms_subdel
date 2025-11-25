@@ -46,7 +46,7 @@
                     <td class="align-middle text-start"><?= $c->id; ?></td>
                     <td class="align-middle text-start"><?= $c->title; ?></td>
                     <td class="align-middle text-start"><?= $c->status == 'publish' ? 'Publicado' : 'Borrador' ?> </td>
-                    <td class="align-middel text-start"><?= $c->username.' '.$c->userlastname; ?></td>
+                    <td class="align-middle text-start"><?= $c->username.' '.$c->userlastname; ?></td>
                     <td class="align-middle text-start"><?= $c->created_at; ?></td>
                     <td class="align-middle text-end">
                         <a href="<?= base_url('admin/courses/edit/' . $c->id); ?>" type="button" class="btn btn-primary d-inline-block" id="edit_course">

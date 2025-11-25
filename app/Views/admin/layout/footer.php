@@ -12,6 +12,7 @@
 <script type="text/javascript" src="<?= base_url('js/jquery-resizable.min.js?v=0.1'); ?>"></script>
 
 <script type="text/javascript" src="<?= base_url('dist/trumbowyg-2.28.0/plugins/resizimg/trumbowyg.resizimg.js'); ?>"></script>
+<script type="text/javascript" src="<?= base_url('js/trumbowyg.pdfupload.js'); ?>"></script>
 <script type="text/javascript" src="<?= base_url('dist/trumbowyg-2.28.0/langs/es.js');?>"></script>
 
 <script type="text/javascript" src="<?= base_url('js/video.min.js'); ?>"></script>
@@ -62,8 +63,17 @@
         ['unorderedList', 'orderedList'],
         ['horizontalRule'],
         ['removeformat'],
+        ['uploadpdf'],
         ['fullscreen']
-      ]
+      ],
+      plugins: {
+        uploadpdf: {
+          serverPath: '<?= base_url('admin/home/upload_media') ?>',
+          deletePath: '<?= base_url('admin/home/delete_media') ?>',
+        }
+      }
+    }).on('tbwinit', function(){
+      //console.log('Trumbowyg initialized');
     });
   });
 </script>

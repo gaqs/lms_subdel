@@ -35,7 +35,7 @@
   <link rel="stylesheet" type="text/css" href="<?= base_url('dist/bootstrap-5.3.3/css/bootstrap.css');?>">
   <link rel="stylesheet" type="text/css" href="<?= base_url('dist/bootstrap-icons-1.11.3/font/bootstrap-icons.css');?>">
   <link rel="stylesheet" type="text/css" href="<?= base_url('css/hover.css?v=0.01');?>">
-  <link rel="stylesheet" type="text/css" href="<?= base_url('css/styles.css?v=0.07');?>">
+  <link rel="stylesheet" type="text/css" href="<?= base_url('css/styles.css?v=0.08');?>">
 
 </head>
 <body>

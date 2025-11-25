@@ -87,7 +87,7 @@ class Comment extends BaseController
         try{
             $commentData = [
                 'id' => $id,
-                'comment' => '<i><small>[Comentario eliminado]</sm all></i>'
+                'comment' => '<i><small>[Comentario eliminado]</small></i>'
             ];
             $this->commentModel->save($commentData);
 

@@ -41,10 +41,15 @@ if (!function_exists('uploadMediaFile')) {
    * 
    * @return string|false Return an array with the file path and name if successful, or false if failed.
    */
-  function uploadMediaFile($file, $fileName, $post_id = '0',$uploadDir='blogs', $allowedTypes = ['jpg','jpeg','png','mp4','avi', 'pdf'])
+  function uploadMediaFile($file, $fileName, $post_id = '0',$uploadDir='blogs', $allowedTypes = ['jpg','jpeg','png','mp4','avi', 'pdf'],  $maxSize = 300000)
   {
 
     if ($file->isValid() && !$file->hasMoved()) {
+
+      // Check the file size
+        if ($file->getSizeByUnit('kb') > $maxSize) {
+            return false; // File exceeds the maximum size
+        }
 
         // Extract the file extension
         $extension = $file->getClientExtension();
@@ -149,7 +154,7 @@ function blog_datetime($datetime)
 
 function badWordFilter($text)
 {
-  $badWords = APPPATH.'Language/badword.json';
+  $badWords = APPPATH.'Language/es/badword.json';
   // Expresiones regulares para variaciones de palabras (como tildes, errores, etc.)
   $patterns = [];
   foreach ($badWords as $word) {

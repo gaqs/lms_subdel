@@ -44,6 +44,7 @@ class Home extends BaseController
     {
         // Obtener el servicio de sesión
         $session = session();
+
         // Verificar el límite de correos
         $limitCheck = checkEmailLimit(1, $session);
         if ($limitCheck !== true) {
@@ -51,26 +52,45 @@ class Home extends BaseController
         }
         
         $data = $this->request->getPost();
-
         if(!$this->modelRules->run($data, 'help_rules')){ //run rules of validation of data for blog
             return redirect()->to(base_url('#help'))->withInput()->with('errors', $this->modelRules->getErrors());
         }
 
-        $email = service('email');
+        $config = [
+            'protocol'   => 'smtp',
+            'SMTPHost'   => env('email.help.SMTPHost'),
+            'SMTPUser'   => env('email.help.SMTPUser'),
+            'SMTPPass'   => env('email.help.SMTPPass'),
+            'SMTPPort'   => 587,
+            'SMTPCrypto' => 'tls',
+            'mailType'   => 'text',
+            'charset'    => 'UTF-8',
+            'userAgent'  => 'LMS',
+        ];
 
-        //$email->setFrom($data['email'], $data['name']);
-        $email->setTo($data['email']);
+        $email = service('email');
+        $email->initialize($config);
+
+        $email->setFrom($data['email'], $data['name']);
+        $email->setTo('support@subdelpuertomontt.cl');
         $email->setSubject($data['subject']);
         $email->setMessage($data['message']);
 
         if (! $email->send()) {
+            
+            // Obtener información de depuración del email
+            $debug = $email->printDebugger(['headers', 'subject', 'body']);
+            // Loguear siempre el debug (evita exponer credenciales a usuarios)
+            log_message('error', 'Email send failed: ' . $debug);
+            // Mostrar detalle solo en entorno development
+            if (ENVIRONMENT === 'development') {
+                return redirect()->to(base_url('#help'))->withInput()->with('error', 'No fue posible enviar el mensaje. Debug: ' . $debug);
+            }
             return redirect()->to(base_url('#help'))->withInput()->with('error', 'No fue posible enviar el mensaje.');
         }else{
             $session->set('email_count', $session->get('email_count') + 1);
             return redirect()->to(base_url('#help'))->withInput()->with('success', 'Mensaje enviado correctamente.');
-        }
-
-        
+        }   
     }
 
 
@@ -145,5 +165,10 @@ class Home extends BaseController
         }    
 
         return view('web/sections/static/verify', $data);
+    }
+
+    public function ttcc()
+    {
+        return view('web/sections/static/ttcc');
     }
 }

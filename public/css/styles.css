@@ -1,6 +1,18 @@
-body{
+body {
   font-family: "Jost", sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
+main {
+  flex: 1;
+}
+
+footer {
+  margin-top: auto;
+}
+
 .p-15{
   padding: 15px !important;
 }

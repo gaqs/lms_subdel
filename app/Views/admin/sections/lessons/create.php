@@ -40,7 +40,6 @@
           <div class="row">
             <input type="hidden" id="course_id" name="course_id" value="<?= $lesson->course_id ?? '' ?>">
             <input type="hidden" id="module_id" name="module_id" value="<?= $lesson->module_id ?? '' ?>">
-            
             <input type="hidden" id="lesson_id" name="lesson_id" value="<?= $lesson->id ?? '' ?>">
 
             <div class="col-md-12 mb-3">
@@ -70,7 +69,7 @@
                   if($ext == '.mp4'):
               ?>
                   <div class="file_container position-relative mt-3">
-                    <a href="<?= base_url('admin/blogs/delete_file?id='.$lesson->id.'&type=file'); ?>" class="text-danger position-absolute end-0 delete_button"  onclick="return confirm('¿Está seguro de querer eliminar el video?');">
+                    <a href="<?= base_url('admin/home/delete_media?id='.$lesson->id.'&type=file&folder=lessons'); ?>" class="text-danger position-absolute end-0 delete_button"  onclick="return confirm('¿Está seguro de querer eliminar el video?');">
                       <i class="bi bi-trash"></i>
                     </a>
                     <video class="video-js mt-4 w-100 h-100" controls>
@@ -80,7 +79,7 @@
               
               <?php elseif($ext == '.pdf'):?>
                 <div class="file_container position-relative mt-3">
-                  <a href="<?= base_url('admin/lessons/delete_media?id='.$lesson->id.'&type=file'); ?>" class="text-danger position-absolute end-0 delete_button"  onclick="return confirm('¿Está seguro de querer eliminar el video?');">
+                  <a href="<?= base_url('admin/home/delete_media?id='.$lesson->id.'&type=file&folder=lessons'); ?>" class="text-danger position-absolute end-0 delete_button"  onclick="return confirm('¿Está seguro de querer eliminar el video?');">
                     <i class="bi bi-trash"></i>
                   </a>
                   <embed src="<?=base_url('public/uploads/lessons/'.$lesson->file) ?>" type="application/pdf" height="500" style="width:100%;">
@@ -92,9 +91,12 @@
 
             </div>
             <div class="col-md-12 mt-3">
-              <button type="submit" class="btn btn-success float-end">
-                <i class="bi bi-floppy2"></i> Guardar
-              </button>
+              <div class="d-flex flex-column align-items-end">
+                <button type="submit" class="btn btn-success float-end <?= $lesson->instructor_id == auth()->user()->id ? '' : 'disabled' ?>">
+                  <i class="bi bi-floppy2"></i> Guardar
+                </button>
+                <span class="text-danger text-end"><?= $lesson->instructor_id == auth()->user()->id ? '' : '<i>No tiene permisos para editar este módulo</i>' ?></span>
+              </div>
             </div>
           </div>
         </div>

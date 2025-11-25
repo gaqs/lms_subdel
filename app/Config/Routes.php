@@ -12,6 +12,7 @@ $routes->get('/',                     'Home::index');
 $routes->post('/help',                'Home::help');
 $routes->get('/certificate',          'Home::certificate',      ['filter' => 'group:admin,user']);
 $routes->get('/verify-certificate',   'Home::verify');
+$routes->get('/terms-and-conditions', 'Home::ttcc');
 
 $routes->get('/blogs',                'Blog::index');
 $routes->get('/blogs/show/(:num)',    'Blog::show/$1');
@@ -29,6 +30,7 @@ $routes->get('/lesson/show/(:num)',           'Lesson::show/$1',            ['fi
 $routes->post('/lesson/progress',             'Lesson::progress',           ['filter' => 'group:admin,user']);
 $routes->post('/lesson/check_live_progress',  'Lesson::check_live_progress',['filter' => 'group:admin,user']);
 
+
 $routes->group('user', ['filter' => 'group:admin,user'], static function($routes){
 
   $routes->get('/',                   'User::index');
@@ -41,10 +43,12 @@ $routes->group('user', ['filter' => 'group:admin,user'], static function($routes
 
 });
 
+
 $routes->group('admin', ['filter' => 'group:superadmin,admin'], static function($routes){
 
   $routes->get('/',                  'Admin\Home::index');
   $routes->get('home/delete_media',  'Admin\Home::delete_media');
+  $routes->post('home/upload_media', 'Admin\Home::upload_media');
 
   //Admin / users
   $routes->get('users',              'Admin\Users::index');
@@ -85,10 +89,10 @@ $routes->group('admin', ['filter' => 'group:superadmin,admin'], static function(
   $routes->post('lesson/delete',     'Admin\Lesson::delete');
 
   //Admin / comments
-  $routes->get('comments/',            'Admin\Comment::index');
-  $routes->get('comments/edit/(:num)', 'Admin\Comment::edit/$1');
-  $routes->post('comments/update',     'Admin\Comment::update');
-  $routes->get('comments/delete',     'Admin\Comment::delete');
+  $routes->get('comments/',             'Admin\Comment::index');
+  $routes->get('comments/edit/(:num)',  'Admin\Comment::edit/$1');
+  $routes->post('comments/update',      'Admin\Comment::update');
+  $routes->get('comments/delete',       'Admin\Comment::delete');
 
 });
 

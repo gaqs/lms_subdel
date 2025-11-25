@@ -14,7 +14,7 @@
 		</ol>
 	</nav>
 
-	<div class="card">
+	<div class="card mb-5">
 		<div class="card-body">
 			<h5 class="card-title"><?= ($action == 'new') ? 'Crear' : 'Editar' ?>  curso</h5>
 			<hr>
@@ -96,7 +96,7 @@
 
 										<?php if (!empty($course->image)): ?>
 											<div class="file_container position-relative mt-3" style="width:50%;">
-												<a href="<?= base_url('admin/home/delete_media?id=' . $course->id . '&type=image&folder=courses'); ?>" class="text-danger position-absolute end-0 delete_button" onclick="return confirm('¿Está seguro de querer eliminar el video?');">
+												<a href="<?= base_url('admin/home/delete_media?id=' . $course->id . '&type=image&folder=courses'); ?>" class="btn btn-danger position-absolute end-0 delete_button <?= $course->instructor_id == auth()->user()->id ? '' : 'disabled' ?>" onclick="return confirm('¿Está seguro de querer eliminar el video?');">
 													<i class="bi bi-trash"></i>
 												</a>
 												<img src="<?= base_url('public/uploads/courses/' . $course->image) ?>" class="w-100">
@@ -131,9 +131,12 @@
 						</div>
 					</div>
 					<div class="col-md-12 mt-3">
-						<button type="submit" class="btn btn-success float-end">
-							<i class="bi bi-floppy2"></i> Guardar
-						</button>
+						<div class="d-flex flex-column align-items-end">
+							<button type="submit" class="btn btn-success mb-2 <?= $course->instructor_id == auth()->user()->id ? '' : 'disabled' ?>">
+								<i class="bi bi-floppy2"></i> Guardar
+							</button>
+							<span class="text-danger text-end"><?= $course->instructor_id == auth()->user()->id ? '' : '<i>No tiene permisos para editar este curso</i>' ?></span>			
+						</div>
 					</div>
 
 				</div>

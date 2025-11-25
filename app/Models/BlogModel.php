@@ -10,7 +10,7 @@ class BlogModel extends Model
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
+    protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = ['id','category_id','user_id','title','status', 'image','description','file','keywords','created_at','updated_at','deleted_at'];
 

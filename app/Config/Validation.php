@@ -174,6 +174,10 @@ class Validation extends BaseConfig
             'label' => 'resumen',     
             'rules' => 'required|min_length[5]|max_length[300]' 
         ], 
+        'level' => [ 
+            'label' => 'nivel',     
+            'rules' => 'required' 
+        ], 
         'category' => [ 
             'label' => 'categoria',  
             'rules' => 'required' 

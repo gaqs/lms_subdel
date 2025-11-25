@@ -5,7 +5,10 @@
   <hr>
   
   <div class="row">
-    <?php foreach ($courses as $c): ?>
+    <?php 
+    if( !empty($courses) ): 
+    foreach ($courses as $c): 
+    ?>
     <div class="col-md-6 mb-4">
       <div class="card w-100 hvr-float">
         <div class="card-img-top card_header">
@@ -33,7 +36,18 @@
         </div>
       </div>
     </div>
-    <?php endforeach; ?>
+    <?php 
+    endforeach; 
+    else:
+    ?>
+    <div class="col-12">
+      <div class="alert alert-info" role="alert">
+        No estás inscrito en ningún curso.
+      </div>
+    </div>
+    <?php 
+    endif;
+    ?>
   </div>
 
 <?= $this->endSection() ?>

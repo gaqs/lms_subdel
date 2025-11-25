@@ -4,7 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\BlogModel;
-use App\Models\CategoryModel;
+use App\Models\CommentModel;
 use Config\Services;
 
 
@@ -13,10 +13,14 @@ class Blog extends BaseController
     protected $blogModel;
     protected $blogRules;
 
+    protected $commentModel;
+
     public function __construct()
     {
         $this->blogModel = new BlogModel();
         $this->blogRules = Services::validation();
+
+        $this->commentModel = new CommentModel();
 
     }
 
@@ -124,10 +128,24 @@ class Blog extends BaseController
     {
         $id = $this->request->getPost('id');
 
-        deleteMediaFile($id,'blogs', 'file');
-        deleteMediaFile($id, 'blogs', 'image');
+        //deleteMediaFile($id,'blogs', 'file');
+        //deleteMediaFile($id, 'blogs', 'image');
 
         $this->blogModel->delete($id);
+        $this->commentModel->where('section', 'blog')
+                            ->where('section_id', $id)
+                            ->delete();
+        
+        //delete comments associated to the blog post
+        $comments = $this->commentModel->where('section', 'blogs')
+                                       ->where('section_id', $id)
+                                       ->asObject()
+                                       ->findAll();
+
+        foreach ($comments as $comment) {
+            $this->commentModel->delete($comment->id);
+        }
+
         return redirect()->back()->with('success', 'Post eliminado correctamente');
 
     }

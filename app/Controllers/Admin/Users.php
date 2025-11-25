@@ -4,10 +4,17 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use CodeIgniter\Shield\Entities\User;
+use App\Models\CourseModel;
 
 class Users extends BaseController
 {
-    
+    protected $courseModel;
+
+    public function __construct()
+    {
+        $this->courseModel = new CourseModel();
+    }
+
     public function index()
     {
         //Codeigniter Default Shield User Model
@@ -75,9 +82,14 @@ class Users extends BaseController
     {
         $user = auth()->getPRovider();
         $data['user']= $user->findById($id);
-
         $db = db_connect();
-        $query = $db->table('auth_groups_users') ->where('user_id', $id) ->get() ->getRow();
+        $data['courses'] = $db->table('user_has_courses')
+                                ->select('user_has_courses.id, user_has_courses.course_id, user_has_courses.complete, courses.id as course_id, courses.title')
+                                ->join('courses', 'user_has_courses.course_id = courses.id')
+                                ->where('user_has_courses.user_id', $id)
+                                ->get()->getResult();
+        $db = db_connect();
+        $query = $db->table('auth_groups_users')->where('user_id', $id)->get()->getRow();
 
         if( !empty($query)){
             if( $query->group == 'admin' || $query->group == 'superadmin' ){
@@ -87,7 +99,6 @@ class Users extends BaseController
             }
         }
         
-
         $data['action'] = 'edit';
 
         return view('admin/sections/users/create', $data);
@@ -122,7 +133,6 @@ class Users extends BaseController
             $users->addToDefaultGroup($user);
         }
         
-
         return redirect()->back()->withInput()->with('success', 'Usuario editado correctamente');
 
     }
@@ -134,5 +144,7 @@ class Users extends BaseController
         $users = auth()->getProvider();
 
         $users->delete($request['id']);
+
+        return redirect()->back()->withInput()->with('success', 'Usuario eliminado correctamente');
     }
 }

@@ -3,16 +3,21 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Traits\AuthorizationTrait;
 use App\Models\CourseModel;
 use App\Models\LessonModel;
 use App\Models\ModuleModel;
+use App\Models\CommentModel;
 use Config\Services;
 
 class Course extends BaseController
 {
+    use AuthorizationTrait;
+
     protected $courseModel;
     protected $moduleModel;
     protected $lessonModel;
+    protected $commentModel;
     protected $modelRules;
 
     public function __construct()
@@ -20,7 +25,8 @@ class Course extends BaseController
         $this->courseModel = new CourseModel();
         $this->lessonModel = new LessonModel();
         $this->moduleModel = new ModuleModel();
-        
+        $this->commentModel = new CommentModel();
+
         $this->modelRules = Services::validation();
     }
 
@@ -91,8 +97,16 @@ class Course extends BaseController
         $modules = $this->moduleModel->where('course_id', $course->id)->orderBy('order_id')->asObject()->findAll();
 
         $lessons = [];
-        foreach ($modules as $module) {
-            $lessons[$module->id] = $this->lessonModel->where('module_id', $module->id)->orderBy('order_id')->asObject()->findAll();
+
+        //verificar si existen modulos creados
+        if( !empty($modules )){
+            foreach ($modules as $module) {
+                //verificar si el modulo tiene lecciones asociadas
+                $lesson = $this->lessonModel->where('module_id', $module->id)->first();
+                if (!empty($lesson)) {
+                    $lessons[$module->id] = $this->lessonModel->where('module_id', $module->id)->orderBy('order_id')->asObject()->findAll();
+                } 
+            }
         }
 
         $data['course'] = $course;
@@ -105,9 +119,14 @@ class Course extends BaseController
     public function update($id = null)
     {
         $data = $this->request->getPost();
+        
         $course_id = $data['course_id'];
-
-        if(!$this->modelRules->run($data, 'course_rules')){ //run rules of validation of data for blog
+        //verifica que el instructor del curso sea el mismo que el usuario logueado
+        if( $redirect = $this->verifyCourseInstructor( $course_id ) ){
+            return $redirect;
+        }
+        //run rules of validation of data for blog
+        if(!$this->modelRules->run($data, 'course_rules')){ 
             return redirect()->back()->withInput()->with('errors', $this->modelRules->getErrors());
         }
         $image = $this->request->getFile('image');
@@ -129,8 +148,13 @@ class Course extends BaseController
 
         $this->courseModel->save($courseData);
 
+        if (!isset($data['course'][$course_id])) {
+            //si no hay modulos, redirigir
+            return redirect()->to(base_url('admin/courses/edit/'.$data['course_id']))->with('success', 'Curso editado correctamente.');
+        }
+        
         $modules = $data['course'][$course_id]; //course[id_curso][order] = id_modulo - El curso siempre va a ser uno solo
-        $lessons = $data['module']; //module[id_modulo][order] = id_lesson
+        $lessons = isset($data['module']) ? $data['module'] : ''; //module[id_modulo][order] = id_lesson
 
         //actualizar orden de modulos por id
         if(!empty($modules)){
@@ -154,7 +178,7 @@ class Course extends BaseController
 
     public function delete($id = null)
     {
-        //Al borrar cursos, hay que borrar los modulos y lecciones pertenecientes al curso.
+        //Al borrar cursos, hay que borrar los modulos y lecciones pertenecientes al curso. (softdelete)
         $id = $this->request->getPost('id'); //course_id
 
         // Delete lessons
@@ -162,15 +186,25 @@ class Course extends BaseController
         foreach ($modules as $module) {
             $lessons = $this->lessonModel->where('module_id', $module->id)->asObject()->findAll();
             foreach ($lessons as $lesson) {
-                deleteMediaFile($lesson->id, 'lessons', 'file');
+                //deleteMediaFile($lesson->id, 'lessons', 'file');
                 $this->lessonModel->delete($lesson->id);
             }
             $this->moduleModel->delete($module->id);
         }
 
-        deleteMediaFile($id, 'courses', 'image');
+        //delete comments asociados al curso
+        $comments = $this->commentModel->where('section', 'courses')
+                                       ->where('section_id', $id)
+                                       ->asObject()
+                                       ->findAll();
+
+        foreach ($comments as $comment) {
+            $this->commentModel->delete($comment->id);
+        }
+
+        //deleteMediaFile($id, 'courses', 'image');
         $this->courseModel->delete($id);
         
-        return redirect()->back()->with('success', 'Post eliminado correctamente');
+        return redirect()->back()->with('success', 'Curso eliminado correctamente');
     }
 }

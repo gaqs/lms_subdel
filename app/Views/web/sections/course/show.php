@@ -64,11 +64,38 @@
               </li>
             </ul>
             <div class="d-flex">
-              <a href="<?= base_url('courses/join?lesson_id='.$first); ?>" class="btn btn-success btn-lg my-3 me-2 flex-grow-1" onclick="return confirm('¿Está seguro que desea realizar el siguiente curso? Quedará añadido a su perfil.');">Ir al curso <i class="bi bi-arrow-right"></i></a>
-              <a href="<?= base_url('user/user_save_wish?course_id='.$course->id); ?>" class="btn btn<?= empty($has_wish) ? '-outline':'' ?>-danger btn-lg my-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?= empty($has_wish) ? 'Guardar en favoritos':'Elliminar de favoritos' ?>">
+              <?php if( $is_doing ): ?>
+              <a href="<?= base_url('courses/join?lesson_id='.$first); ?>" class="btn btn-success btn-lg mt-3 mb-1 me-2 flex-grow-1">Ir al curso <i class="bi bi-arrow-right"></i></a>
+              
+              <?php else: ?>
+              <button type="button" class="btn btn-success btn-lg mt-3 mb-1  me-2 flex-grow-1" data-bs-toggle="modal" data-bs-target="#access_course">Ir al curso <i class="bi bi-arrow-right"></i></button>
+              
+              <?php endif; ?>
+              <a href="<?= base_url('user/user_save_wish?course_id='.$course->id); ?>" class="btn btn<?= empty($has_wish) ? '-outline':'' ?>-danger btn-lg mt-3 mb-1 " data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?= empty($has_wish) ? 'Guardar en favoritos':'Elliminar de favoritos' ?>">
                 <i class="bi bi-heart"></i>
               </a>
             </div>
+
+            <?=  $is_doing ? '<i class="text-success">Usted esta inscrito en este curso</i>':'' ?>
+
+            <!-- modal acceso curso -->
+             <div id="access_course" class="modal fade" tabindex="-1">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Acceso al curso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>¿Está seguro que desea realizar el siguiente curso? Quedará añadido a su perfil.</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <a href="<?= base_url('courses/join?lesson_id='.$first); ?>" class="btn btn-primary">Ir al curso</a>
+                  </div>
+                </div>
+              </div>
+             </div>
             
           </div>
         </div>

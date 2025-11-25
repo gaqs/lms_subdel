@@ -77,12 +77,36 @@
             </div>
           </div>
           <?php endif ?>
+          
+          <div class="row">
+            <div class="col-md-12">
 
+            <h5 class="card-title mt-4">Cursos</h5>
+            <hr>
+            <!-- lista de cursos tomados por el usuario -->
+            <ul class="lh-lg">
+              <?php 
+              if( empty($courses) ){
+                echo '<li><i>El usuario no ha tomado ningún curso aún.</i></li>';
+              }else{
+                foreach ($courses as $count => $course) {
+                  $complete = $course->complete == 1 ? '[Completado]' : '[En progreso]';
+                  echo '<li><a href="'.base_url('courses/show/').$course->course_id.'" target="_blank">'.$course->title.'</a> '.$complete.'</li>';
+                }
+              }
+              ?>
+            </ul>
+
+            </div>
+          </div>
+          
           <div class="col-md-12 mt-3"> 
             <button type="submit" class="btn btn-success float-end"><i class="bi bi-floppy2"></i> Guardar</button>
           </div>
         </div>
       </form>  
+
+      
 
     </div>
   </div>

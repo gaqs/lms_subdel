@@ -49,9 +49,12 @@
               <textarea name="description" class="form-control" id="textarea-module_description" rows="5"><?= old('description', $module->description ?? '') ?></textarea>
             </div>
             <div class="col-md-12 mt-3">
-              <button type="submit" class="btn btn-success float-end">
-                <i class="bi bi-floppy2"></i> Guardar
-              </button>
+              <div class="d-flex flex-column align-items-end">
+                <button type="submit" class="btn btn-success float-end <?= $module->instructor_id == auth()->user()->id ? '' : 'disabled' ?>">
+                  <i class="bi bi-floppy2"></i> Guardar
+                </button>
+                <span class="text-danger text-end"><?= $module->instructor_id == auth()->user()->id ? '' : '<i>No tiene permisos para editar este módulo</i>' ?></span>
+              </div>
             </div>
           </div>
           

@@ -4,7 +4,10 @@
 <h5 class="card-title">Mis Favoritos</h5>
   <hr>
   <div class="row">
-    <?php if(!empty($courses)): foreach ($courses as $c): ?>
+    <?php
+    if(!empty($courses)): 
+      foreach ($courses as $c): 
+    ?>
     <div class="col-md-4 mb-4">
       <div class="card w-100 hvr-float">
         <div class="card-img-top card_header">
@@ -31,9 +34,14 @@
         </div>
       </div>
     </div>
-    <?php endforeach; endif; ?>
-
-    <?php if( !empty($posts)): foreach ($posts as $p):?>
+    <?php 
+      endforeach; 
+    endif; 
+    ?>
+    <?php
+    if( !empty($posts)): 
+      foreach ($posts as $p):
+    ?>
     <div class="col-md-4 mb-4">
       <div class="card w-100 hvr-float">
         <div class="card-img-top card_header">
@@ -60,7 +68,20 @@
         </div>
       </div>
     </div>
-    <?php endforeach; endif; ?>
+    <?php 
+      endforeach; 
+    endif; 
+
+    if( empty($courses) && empty($posts) ):
+    ?>
+    <div class="col-12">
+      <div class="alert alert-info" role="alert">
+        No tienes favoritos aún.
+      </div>
+    </div>
+    <?php
+    endif;
+    ?>
   </div>
 
 <?= $this->endSection() ?>
